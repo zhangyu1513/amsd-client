@@ -21,7 +21,7 @@ const handleLogoClick = () => {
     <!-- Logo区域 -->
     <div class="flex items-center justify-center h-16 px-4 cursor-pointer hover:opacity-80 transition-opacity"
       @click="handleLogoClick">
-      <span class="text-lg font-bold logo-text">AMSD</span>
+      <span class="text-3xl font-bold logo-text">AMSD</span>
     </div>
   </div>
 </template>
@@ -39,7 +39,7 @@ const handleLogoClick = () => {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-flow 10s linear infinite;
+  animation: gradient-flow 3s linear infinite;
   font-weight: 700;
 }
 

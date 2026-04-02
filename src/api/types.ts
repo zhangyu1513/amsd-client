@@ -104,7 +104,7 @@ export interface Fracture {
   UpdatedAt?: Date
   DeletedAt?: Date
 
-  UID: string // 转档编号，not null
+  UID?: string // 转档编号，not null
 
   EDA?: string
   Threads?: number
@@ -120,8 +120,10 @@ export interface Fracture {
   Error?: string // text 类型
   Log?: string // text 类型
 
-  ProcessID: number // 外键，not null
+  ProcessID?: number // 外键，not null
 }
+
+export interface FractureSearchParams extends PaginationParams, Fracture {}
 
 export interface Density {
   ID?: number

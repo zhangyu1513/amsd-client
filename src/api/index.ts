@@ -10,6 +10,8 @@ import type {
   Process,
   ProcessSearchParams,
   OrderSearchParams,
+  Fracture,
+  FractureSearchParams,
 } from './types'
 
 // 使用 env.ts 获取 API 配置
@@ -179,7 +181,7 @@ export const api = {
     },
   },
   fracture: {
-    getFractures: async (params?: any) => {
+    getFractures: async (params: FractureSearchParams) => {
       const fractureModule = await import('./fracture')
       return fractureModule.default.getFractures(params)
     },
@@ -199,18 +201,18 @@ export const api = {
     },
   },
   log: {
-    getProcessLogs: async (processId: number, params?: any) => {
+    getProcessLogs: async (params: Process) => {
       const logModule = await import('./log')
-      return logModule.default.getProcessLogs(processId, params)
+      return logModule.default.getProcessLog(params)
     },
-    getFractureLogs: async (fractureId: number, params?: any) => {
+    getFractureLogs: async (params: Fracture) => {
       const logModule = await import('./log')
-      return logModule.default.getFractureLogs(fractureId, params)
+      return logModule.default.getFractureLog(params)
     },
-    getDensityLogs: async (densityId: number, params?: any) => {
-      const logModule = await import('./log')
-      return logModule.default.getDensityLogs(densityId, params)
-    },
+    // getDensityLogs: async (densityId: number, params?: any) => {
+    //   const logModule = await import('./log')
+    //   return logModule.default.getDensityLogs(densityId, params)
+    // },
   },
   dashboard: {
     getDashboardStats: async () => {

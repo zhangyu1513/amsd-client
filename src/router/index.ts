@@ -90,6 +90,58 @@ const routes: AppRouteRecordRaw[] = [
             },
             name: 'WorkspaceProcesses',
           },
+          {
+            path: 'fractures',
+            component: () => import('@/views/workspace/FractureCard.vue'),
+            meta: {
+              title: '转档任务',
+              icon: 'MessageBox',
+              showInMenu: true,
+              order: 2,
+              breadcrumb: ['工作空间', '转档任务'],
+              requiresAuth: true,
+            },
+            name: 'WorkspaceFracture',
+          },
+          {
+            path: 'xors',
+            component: () => import('@/views/workspace/XorCard.vue'),
+            meta: {
+              title: 'LVL任务',
+              icon: 'MessageBox',
+              showInMenu: true,
+              order: 2,
+              breadcrumb: ['工作空间', 'LVL任务'],
+              requiresAuth: true,
+            },
+            name: 'WorkspaceLVL',
+          },
+          {
+            path: 'mrcs',
+            component: () => import('@/views/workspace/MrcCard.vue'),
+            meta: {
+              title: 'MRC任务',
+              icon: 'MessageBox',
+              showInMenu: true,
+              order: 2,
+              breadcrumb: ['工作空间', 'MRC任务'],
+              requiresAuth: true,
+            },
+            name: 'WorkspaceMRC',
+          },
+          {
+            path: 'densities',
+            component: () => import('@/views/workspace/DensityCard.vue'),
+            meta: {
+              title: '透光率任务',
+              icon: 'MessageBox',
+              showInMenu: true,
+              order: 2,
+              breadcrumb: ['工作空间', '透光率任务'],
+              requiresAuth: true,
+            },
+            name: 'WorkspaceDensity',
+          },
         ],
       },
     ],
@@ -130,7 +182,7 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach((to) => {
   const title = to.meta?.title as string | undefined
-  document.title = title || 'AMS'
+  document.title = title || 'AMSD'
 })
 
 export default router

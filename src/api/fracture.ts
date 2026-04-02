@@ -1,13 +1,18 @@
 // 断裂分析API
+import { fract } from 'three/src/nodes/math/MathNode.js'
 import { http } from './index'
-import type { Fracture } from './types'
+import type { Fracture, FractureSearchParams, PaginatedResponse } from './types'
 
 /**
  * 获取断裂分析列表
  */
-export async function getFractures(params?: { ProcessID?: number }): Promise<Fracture[]> {
+export async function getFractures(
+  params: FractureSearchParams,
+): Promise<PaginatedResponse<Fracture>> {
   try {
-    const response = await http.get<Fracture[]>('/api/v2/fractures', { params })
+    const response = await http.get<PaginatedResponse<Fracture>>('/api/v2/fractures', {
+      params: params,
+    })
     return response
   } catch (error) {
     console.error('获取断裂分析列表失败:', error)

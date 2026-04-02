@@ -4,17 +4,18 @@ import { ElMessage, ElMessageBox, ElSkeleton, ElSkeletonItem } from 'element-plu
 import { useRouter } from 'vue-router'
 import { Select, CloseBold, SemiSelect, Tickets, MessageBox, Plus, Search, Refresh, CopyDocument } from '@element-plus/icons-vue'
 import { api } from '../../api'
-import type { PaginationParams, Process, ProcessSearchParams } from '../../api/types'
+import type { PaginationParams, Fracture, FractureSearchParams } from '../../api/types'
 import Log from './components/Log.vue'
 
+
 // 表格数据
-const tableData = ref<Process[]>([])
+const tableData = ref<Fracture[]>([])
 const tableLoading = ref(false)
 
 // 数据版本号 - 用于触发动画
 const dataVersion = ref(0)
 
-const searchForm = ref<Process>({})
+const searchForm = ref<Fracture>({})
 
 const paginationForm = ref<PaginationParams>({
   Page: 1,
@@ -29,11 +30,11 @@ const logRef = ref<InstanceType<typeof Log>>()
 
 // Emits
 const emit = defineEmits<{
-  'add-process-tab': [processId: number, processUID: string]
+  'add-fracture-tab': [fractureId: number, fractureUID: string]
 }>()
 
-// 搜索参数 - 使用类型安全的 ProcessSearchParams
-const searchParams = computed<ProcessSearchParams>(() => {
+// 搜索参数 - 使用类型安全的 FractureSearchParams
+const searchParams = computed<FractureSearchParams>(() => {
   return {
     ...paginationForm.value,
     ...searchForm.value
@@ -53,22 +54,22 @@ const formatDate = (dateString: string) => {
   }).replace(/\//g, '-')
 }
 
-// 从API获取处理任务数据
-const listProcesses = async () => {
+// 从API获取断裂分析数据
+const listFractures = async () => {
   tableLoading.value = true
   try {
     // 调用API接口
-    const response = await api.process.getProcesses(searchParams.value)
+    const response = await api.fracture.getFractures(searchParams.value)
 
     // 先清空数据，确保动画能重新触发
     tableData.value = []
     // 使用nextTick确保DOM更新后再设置新数据
     await nextTick()
     tableData.value = response.List
-    console.log('获取处理任务数据成功:', response)
+    console.log('获取断裂分析数据成功:', response)
     total.value = response.Total
   } catch (error) {
-    console.error('获取处理任务数据失败:', error)
+    console.error('获取断裂分析数据失败:', error)
     ElMessage.error('获取数据失败，请检查网络连接')
   } finally {
     tableLoading.value = false
@@ -78,31 +79,31 @@ const listProcesses = async () => {
 // 处理分页变化
 const handlePageChange = (page: number) => {
   paginationForm.value.Page = page
-  listProcesses() // 重新加载数据
+  listFractures() // 重新加载数据
 }
 
 // 处理每页显示数量变化
 const handleSizeChange = (size: number) => {
   paginationForm.value.PageSize = size
   paginationForm.value.Page = 1 // 重置到第一页
-  listProcesses() // 重新加载数据
+  listFractures() // 重新加载数据
 }
 
-const toOrders = (processId: number) => {
-  ElMessage.info(`跳转到处理任务 ${processId} 的子单列表`)
-  // router.push({ path: `/workspace/processes/${processId}/orders` })
+const toOrders = (fractureId: number) => {
+  ElMessage.info(`跳转到断裂分析 ${fractureId} 的子单列表`)
+  // router.push({ path: `/workspace/fractures/${fractureId}/orders` })
 }
 
-const toProcesses = (processId: number, processUID: string) => {
-  // 触发添加处理tab事件
-  console.log(`请求添加处理tab，处理任务ID: ${processId}, 任务编号: ${processUID}`)
-  emit('add-process-tab', processId, processUID)
+const toFractures = (fractureId: number, fractureUID: string) => {
+  // 触发添加断裂分析tab事件
+  console.log(`请求添加断裂分析tab，断裂分析ID: ${fractureId}, 转档编号: ${fractureUID}`)
+  emit('add-fracture-tab', fractureId, fractureUID)
 }
 
 // 查看日志
-const viewLog = (processId: number) => {
+const viewLog = (fractureId: number) => {
   if (!logRef.value) return
-  logRef.value.open(processId)
+  logRef.value.open(fractureId)
 }
 
 // 复制文本到剪贴板
@@ -159,7 +160,7 @@ watch(tableData, () => {
 }, { deep: true })
 
 onMounted(() => {
-  listProcesses()
+  listFractures()
 })
 
 onUnmounted(() => {
@@ -207,15 +208,26 @@ onUnmounted(() => {
                 <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
               </template>
             </el-table-column>
-            <!-- <el-table-column prop="UID" label="任务编号" align="center" header-align="center" width="280" /> -->
-            <el-table-column prop="LinkedAddress" label="关联地址" align="center" header-align="center" width="300">
+            <el-table-column prop="UID" label="转档编号" align="center" header-align="center" width="280" />
+            <el-table-column prop="EDA" label="EDA" align="center" header-align="center" width="120" />
+            <el-table-column prop="Threads" label="线程数" align="center" header-align="center" width="80" />
+            <el-table-column prop="Priority" label="优先级" align="center" header-align="center" width="80">
+              <template #default="scope">
+                <el-tag v-if="scope.row.Priority === 1" type="danger" size="small">高</el-tag>
+                <el-tag v-else-if="scope.row.Priority === 2" type="warning" size="small">中</el-tag>
+                <el-tag v-else-if="scope.row.Priority === 3" type="info" size="small">低</el-tag>
+                <el-tag v-else type="default" size="small">{{ scope.row.Priority }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="Format" label="格式" align="center" header-align="center" width="120" />
+            <el-table-column prop="Classify" label="分类" align="center" header-align="center" width="200">
               <template #default="scope">
                 <div class="flex items-center justify-between">
-                  <span class="truncate flex-1 mr-2" :title="scope.row.LinkedAddress">
-                    {{ scope.row.LinkedAddress || '-' }}
+                  <span class="truncate flex-1 mr-2" :title="scope.row.Classify">
+                    {{ scope.row.Classify || '-' }}
                   </span>
-                  <el-button v-if="scope.row.LinkedAddress" type="text" size="small" class="copy-btn"
-                    @click.stop="copyToClipboard(scope.row.LinkedAddress)">
+                  <el-button v-if="scope.row.Classify" type="text" size="small" class="copy-btn"
+                    @click.stop="copyToClipboard(scope.row.Classify)">
                     <el-icon>
                       <CopyDocument />
                     </el-icon>
@@ -238,17 +250,6 @@ onUnmounted(() => {
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="EDA" label="EDA" align="center" header-align="center" width="120" />
-            <el-table-column prop="Threads" label="线程数" align="center" header-align="center" width="80" />
-            <el-table-column prop="Priority" label="优先级" align="center" header-align="center" width="80">
-              <template #default="scope">
-                <el-tag v-if="scope.row.Priority === 1" type="danger" size="small">高</el-tag>
-                <el-tag v-else-if="scope.row.Priority === 2" type="warning" size="small">中</el-tag>
-                <el-tag v-else-if="scope.row.Priority === 3" type="info" size="small">低</el-tag>
-                <el-tag v-else type="default" size="small">{{ scope.row.Priority }}</el-tag>
-              </template>
-            </el-table-column>
-
 
             <el-table-column label="日志" align="center" header-align="center" width="80" fixed="right">
               <template #default="scope">
@@ -276,7 +277,7 @@ onUnmounted(() => {
   </el-row>
 
   <!-- Log 组件 -->
-  <Log ref="logRef" :log-type="'process'" :id="0" />
+  <Log ref="logRef" :log-type="'fracture'" :id="0" />
 </template>
 
 <style scoped>
