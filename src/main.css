@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+html {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  line-height: 1.5;
+  tab-size: 4;
+  text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  line-height: inherit;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+}
+
+/* Element Plus 样式覆盖 - 谨慎使用 */
+.el-card {
+  border-radius: 20px !important;
+}
+
+.el-dialog {
+  border-radius: 20px !important;
+}
+
+.el-dialog__body {
+  width: 100%;
+  height: 95%;
+}
+
+.el-card__body {
+  width: 100%;
+  height: 100%;
+}
+
+.el-menu .el-menu-item.is-active {
+  font-weight: bold;
+}
+
+.el-header {
+  padding: 0 !important;
+}
+
+.el-scrollbar__view {
+  height: 100%;
+}
