@@ -19,6 +19,18 @@ export async function getProcesses(
   }
 }
 
+export async function getProcess(params: Process): Promise<Process> {
+  try {
+    const response = await http.get<Process>('/api/v2/process', {
+      params: params,
+    })
+    return response
+  } catch (error) {
+    console.error('获取处理任务列表失败:', error)
+    throw error
+  }
+}
+
 /**
  * 创建处理任务
  */
@@ -47,6 +59,7 @@ export async function updateProcess(id: number, params: Process): Promise<Proces
 
 export default {
   getProcesses,
+  getProcess,
   createProcess,
   updateProcess,
 }

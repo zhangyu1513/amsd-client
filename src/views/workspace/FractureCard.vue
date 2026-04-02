@@ -28,11 +28,6 @@ const total = ref(0)
 const logRef = ref<InstanceType<typeof Log>>()
 
 
-// Emits
-const emit = defineEmits<{
-  'add-fracture-tab': [fractureId: number, fractureUID: string]
-}>()
-
 // 搜索参数 - 使用类型安全的 FractureSearchParams
 const searchParams = computed<FractureSearchParams>(() => {
   return {
@@ -87,17 +82,6 @@ const handleSizeChange = (size: number) => {
   paginationForm.value.PageSize = size
   paginationForm.value.Page = 1 // 重置到第一页
   listFractures() // 重新加载数据
-}
-
-const toOrders = (fractureId: number) => {
-  ElMessage.info(`跳转到断裂分析 ${fractureId} 的子单列表`)
-  // router.push({ path: `/workspace/fractures/${fractureId}/orders` })
-}
-
-const toFractures = (fractureId: number, fractureUID: string) => {
-  // 触发添加断裂分析tab事件
-  console.log(`请求添加断裂分析tab，断裂分析ID: ${fractureId}, 转档编号: ${fractureUID}`)
-  emit('add-fracture-tab', fractureId, fractureUID)
 }
 
 // 查看日志

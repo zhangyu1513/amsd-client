@@ -85,18 +85,6 @@ const handleSizeChange = (size: number) => {
   paginationForm.value.Page = 1 // 重置到第一页
   listSuits() // 重新加载数据
 }
-
-const toOrders = (suitId: number) => {
-  ElMessage.info(`跳转到套单 ${suitId} 的子单列表`)
-  // router.push({ path: `/workspace/suits/${suitId}/orders` })
-}
-
-const toProcesses = (suitId: number, suitNumber: string) => {
-  // 触发添加处理tab事件
-  console.log(`请求添加处理tab，套单ID: ${suitId}, 套单编号: ${suitNumber}`)
-  emit('add-process-tab', suitId, suitNumber)
-}
-
 // 监听表格数据变化，触发动画
 watch(tableData, () => {
   // 每次数据变化时递增版本号

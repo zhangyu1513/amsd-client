@@ -3,9 +3,10 @@ import { ref, reactive, onMounted, onUnmounted, computed, watch, nextTick } from
 import { ElMessage, ElMessageBox, ElSkeleton, ElSkeletonItem } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { Select, CloseBold, SemiSelect, Tickets, MessageBox, Plus, Search, Refresh, CopyDocument } from '@element-plus/icons-vue'
-import { api } from '../../api'
-import type { PaginationParams, Process, ProcessSearchParams } from '../../api/types'
+import { api } from '@/api'
+import type { PaginationParams, Process, ProcessSearchParams } from '@/api/types'
 import Log from './components/Log.vue'
+import AddFracture from './components/AddFracture.vue'
 
 // 表格数据
 const tableData = ref<Process[]>([])
@@ -26,6 +27,11 @@ const total = ref(0)
 // Log 组件引用
 const logRef = ref<InstanceType<typeof Log>>()
 
+// 当前选中的处理任务
+const selectedProcess = ref<Process>({})
+
+// 控制AddFracture对话框显示
+const showAddFractureDialog = ref(false)
 
 // Emits
 const emit = defineEmits<{
@@ -101,8 +107,20 @@ const toProcesses = (processId: number, processUID: string) => {
 
 // 查看日志
 const viewLog = (processId: number) => {
-  if (!logRef.value) return
-  logRef.value.open(processId)
+    if (!logRef.value) return
+    logRef.value.open(processId)
+}
+
+// 打开添加断裂分析对话框
+const openAddFractureDialog = (process: Process) => {
+    selectedProcess.value = process
+    showAddFractureDialog.value = true
+}
+
+// 关闭添加断裂分析对话框
+const closeAddFractureDialog = () => {
+    showAddFractureDialog.value = false
+    selectedProcess.value = {}
 }
 
 // 复制文本到剪贴板
@@ -248,8 +266,6 @@ onUnmounted(() => {
                 <el-tag v-else type="default" size="small">{{ scope.row.Priority }}</el-tag>
               </template>
             </el-table-column>
-
-
             <el-table-column label="日志" align="center" header-align="center" width="80" fixed="right">
               <template #default="scope">
                 <div class="flex justify-center space-x-1">
@@ -257,6 +273,24 @@ onUnmounted(() => {
                     <el-icon>
                       <Tickets />
                     </el-icon>
+                  </el-button>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" header-align="center" width="300" fixed="right">
+              <template #default="scope">
+                <div class="flex justify-center space-x-1">
+                  <el-button type="primary" size="small" link @click="" disabled>
+                    LVL
+                  </el-button>
+                  <el-button type="primary" size="small" link @click="openAddFractureDialog(scope.row)">
+                    Fracture
+                  </el-button>
+                  <el-button type="primary" size="small" link @click="" disabled>
+                    Density
+                  </el-button>
+                  <el-button type="primary" size="small" link @click="" disabled>
+                    MRC
                   </el-button>
                 </div>
               </template>
@@ -277,6 +311,13 @@ onUnmounted(() => {
 
   <!-- Log 组件 -->
   <Log ref="logRef" :log-type="'process'" :id="0" />
+
+  <!-- AddFracture 组件 -->
+  <AddFracture 
+    :visible="showAddFractureDialog" 
+    :process="selectedProcess"
+    @close="closeAddFractureDialog"
+  />
 </template>
 
 <style scoped>

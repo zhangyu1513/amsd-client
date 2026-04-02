@@ -171,6 +171,10 @@ export const api = {
     },
   },
   process: {
+    getProcess: async (params: Process) => {
+      const processModule = await import('./process')
+      return processModule.default.getProcess(params)
+    },
     getProcesses: async (params: ProcessSearchParams) => {
       const processModule = await import('./process')
       return processModule.default.getProcesses(params)
@@ -185,7 +189,7 @@ export const api = {
       const fractureModule = await import('./fracture')
       return fractureModule.default.getFractures(params)
     },
-    createFracture: async (params: any) => {
+    createFracture: async (params: Fracture) => {
       const fractureModule = await import('./fracture')
       return fractureModule.default.createFracture(params)
     },
