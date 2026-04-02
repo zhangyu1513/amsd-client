@@ -187,8 +187,9 @@ onUnmounted(() => {
             </el-table-column>
             <el-table-column label="运行状态" prop="State" align="center" header-align="center" width="100">
               <template #default="scope">
-                <el-tag v-if="scope.row.State === 'completed'" type="success" size="small">运行中</el-tag>
+                <el-tag v-if="scope.row.State === 'completed'" type="success" size="small">已完成</el-tag>
                 <el-tag v-else-if="scope.row.State === 'failed'" type="danger" size="small">错误</el-tag>
+                <el-tag v-else-if="scope.row.State === 'running'" type="warning" size="small">运行中</el-tag>
                 <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
               </template>
             </el-table-column>

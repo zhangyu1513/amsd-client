@@ -107,20 +107,20 @@ const toProcesses = (processId: number, processUID: string) => {
 
 // 查看日志
 const viewLog = (processId: number) => {
-    if (!logRef.value) return
-    logRef.value.open(processId)
+  if (!logRef.value) return
+  logRef.value.open(processId)
 }
 
 // 打开添加断裂分析对话框
 const openAddFractureDialog = (process: Process) => {
-    selectedProcess.value = process
-    showAddFractureDialog.value = true
+  selectedProcess.value = process
+  showAddFractureDialog.value = true
 }
 
 // 关闭添加断裂分析对话框
 const closeAddFractureDialog = () => {
-    showAddFractureDialog.value = false
-    selectedProcess.value = {}
+  showAddFractureDialog.value = false
+  selectedProcess.value = {}
 }
 
 // 复制文本到剪贴板
@@ -220,8 +220,9 @@ onUnmounted(() => {
             </el-table-column>
             <el-table-column label="运行状态" prop="State" align="center" header-align="center" width="100">
               <template #default="scope">
-                <el-tag v-if="scope.row.State === 'completed'" type="success" size="small">运行中</el-tag>
+                <el-tag v-if="scope.row.State === 'completed'" type="success" size="small">已完成</el-tag>
                 <el-tag v-else-if="scope.row.State === 'failed'" type="danger" size="small">错误</el-tag>
+                <el-tag v-else-if="scope.row.State === 'running'" type="warning" size="small">运行中</el-tag>
                 <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
               </template>
             </el-table-column>
@@ -313,11 +314,7 @@ onUnmounted(() => {
   <Log ref="logRef" :log-type="'process'" :id="0" />
 
   <!-- AddFracture 组件 -->
-  <AddFracture 
-    :visible="showAddFractureDialog" 
-    :process="selectedProcess"
-    @close="closeAddFractureDialog"
-  />
+  <AddFracture :visible="showAddFractureDialog" :process="selectedProcess" @close="closeAddFractureDialog" />
 </template>
 
 <style scoped>

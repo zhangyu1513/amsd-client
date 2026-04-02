@@ -152,6 +152,13 @@ watch(() => props.visible, (newVal) => {
         <!-- 表单内容 -->
         <el-form ref="formRef" :model="fracture" :rules="rules" size="small" label-width="120px" label-position="top"
             class="w-full pl-2 pr-2">
+            <!-- 参数3: Format选择 -->
+            <el-form-item label="Format" prop="Format" class="w-full" disabled>
+                <el-radio-group v-model="fracture.Format">
+                    <el-radio label="OASIS">OASIS</el-radio>
+                    <el-radio label="GDSII">GDSII</el-radio>
+                </el-radio-group>
+            </el-form-item>
             <!-- 参数1: 订单选择-所有/单张 -->
             <el-form-item label="订单选择" prop="orderSelectionType" class="w-full" :disabled="true">
                 <el-radio-group v-model="orderSelectionType" :disabled="true">
@@ -173,13 +180,7 @@ watch(() => props.visible, (newVal) => {
                 </div>
             </el-form-item>
 
-            <!-- 参数3: Format选择 -->
-            <el-form-item label="Format" prop="Format" class="w-full">
-                <el-radio-group v-model="fracture.Format">
-                    <el-radio label="OASIS">OASIS</el-radio>
-                    <el-radio label="GDSII">GDSII</el-radio>
-                </el-radio-group>
-            </el-form-item>
+
         </el-form>
 
         <!-- 底部按钮 -->
