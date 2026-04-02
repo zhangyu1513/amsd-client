@@ -157,7 +157,7 @@ const handleSubmit = async () => {
     const submitData: Process = {
       ...process,
       SuitID: props.suit.ID,
-      Orders: checkedOrders.value.join(',') // 将选中的订单编号用逗号分隔
+      Orders: checkedOrders.value.join(';') // 将选中的订单编号用逗号分隔
     }
 
 
@@ -171,21 +171,21 @@ const handleSubmit = async () => {
     console.log(submitData)
     // return
 
-    // try {
-    //   await api.process.createProcess(submitData)
+    try {
+      await api.process.createProcess(submitData)
 
-    //   // 关闭Dialog
-    //   handleClose()
+      // 关闭Dialog
+      handleClose()
 
-    //   // 显示成功消息
-    //   ElMessage.success('添加处理任务成功')
-    // } catch (error) {
-    //   console.error('创建处理任务失败:', error)
-    //   ElMessage.error('创建处理任务失败，请稍后重试')
-    // } finally {
-    //   loadingInstance.close()
-    //   loading.value = false
-    // }
+      // 显示成功消息
+      ElMessage.success('添加处理任务成功')
+    } catch (error) {
+      console.error('创建处理任务失败:', error)
+      ElMessage.error(error!)
+    } finally {
+      loadingInstance.close()
+      loading.value = false
+    }
 
   } catch (error) {
     console.error('表单验证失败:', error)
@@ -208,10 +208,10 @@ watch(() => props.visible, (newVal) => {
 
 <template>
   <el-dialog v-model="dialogVisible" title="添加处理任务" width="600px" :close-on-click-modal="false"
-    :close-on-press-escape="false" :show-close="false" @close="handleClose">
+    :close-on-press-escape="false" :show-close="false" draggable @close="handleClose">
     <!-- 表单内容 -->
-    <el-form ref="formRef" :model="process" :rules="rules" label-width="100px" label-position="top"
-      class="add-process-form">
+    <el-form ref="formRef" :model="process" :rules="rules" size="small" label-width="100px" label-position="top"
+      class="w-full pl-2 pr-2">
       <el-form-item label="选择订单" prop="Orders" class="w-full">
         <div class="order-table-container" :class="{ 'loading': loading }">
           <div v-if="loading" class="loading-overlay">
@@ -228,21 +228,21 @@ watch(() => props.visible, (newVal) => {
             <p>暂无订单数据</p>
           </div>
 
-          <el-table v-if="!loading && orders.length > 0" :data="orders" border size="small" class="w-full" height="250"
-            @selection-change="handleSelectionChange" :row-key="(row: Order) => row.Number || ''">
-            <el-table-column type="selection" :selectable="selectable" width="55" />
-            <el-table-column prop="Number" label="订单编号" />
-            <el-table-column prop="ModelNumber" label="ModelNumber" width="160">
+          <el-table v-if="!loading && orders.length > 0" :data="orders" border size="small" class="w-full"
+            max-height="400" @selection-change="handleSelectionChange" :row-key="(row: Order) => row.Number || ''">
+            <el-table-column type="selection" :selectable="selectable" align="center" width="40" />
+            <el-table-column prop="Number" label="订单编号" align="center" />
+            <el-table-column prop="ModelNumber" label="ModelNumber" align="center" width="160">
               <template #default="scope">
                 {{ scope.row.ModelNumber || '未设置' }}
               </template>
             </el-table-column>
-            <el-table-column prop="JobdeckLevel" label="JobdeckLevel" width="100">
+            <el-table-column prop="JobdeckLevel" label="JobdeckLevel" align="center" width="100">
               <template #default="scope">
                 {{ scope.row.JobdeckLevel || '未设置' }}
               </template>
             </el-table-column>
-            <el-table-column prop="Status" label="状态" width="80">
+            <el-table-column prop="Status" label="状态" align="center" width="80">
               <template #default="scope">
                 <el-tag v-if="scope.row.Status" :type="scope.row.Status === 'open' ? 'success' : 'info'" size="small">
                   {{ scope.row.Status === 'open' ? '进行中' : scope.row.Status }}
@@ -293,6 +293,7 @@ watch(() => props.visible, (newVal) => {
   position: relative;
   /* border: 1px solid #e4e7ed; */
   border-radius: 4px;
+  width: 100%;
   /* background-color: #fafafa; */
   /* min-height: 200px; */
 }

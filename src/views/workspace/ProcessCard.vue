@@ -103,29 +103,43 @@ const copyToClipboard = (text: string) => {
     return
   }
 
-  try {
-    // 使用现代 Clipboard API
+  // 1. 优先尝试使用现代的 Clipboard API
+  if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => {
       ElMessage.success('已复制到剪贴板')
     }).catch(err => {
-      console.error('复制失败:', err)
-      // 降级方案：使用 document.execCommand
-      const textArea = document.createElement('textarea')
-      textArea.value = text
-      document.body.appendChild(textArea)
-      textArea.select()
-      const success = document.execCommand('copy')
-      document.body.removeChild(textArea)
-
-      if (success) {
-        ElMessage.success('已复制到剪贴板')
-      } else {
-        ElMessage.error('复制失败，请手动复制')
-      }
+      console.error('Clipboard API 复制失败:', err)
+      fallbackCopy(text)
     })
-  } catch (error) {
-    console.error('复制出错:', error)
+  } else {
+    // 2. 如果不支持 Clipboard API (例如在 HTTP 环境下)，直接使用降级方案
+    fallbackCopy(text)
+  }
+}
+
+// 降级方案：使用 document.execCommand
+const fallbackCopy = (text: string) => {
+  const textArea = document.createElement('textarea')
+  // 关键：将 textarea 移出可视区域，而不是用 display: none，以确保兼容性
+  textArea.style.position = 'absolute'
+  textArea.style.left = '-9999px'
+  textArea.value = text
+  document.body.appendChild(textArea)
+  textArea.select()
+
+  try {
+    const success = document.execCommand('copy')
+    if (success) {
+      ElMessage.success('已复制到剪贴板')
+    } else {
+      ElMessage.error('复制失败，请手动复制')
+    }
+  } catch (err) {
+    console.error('execCommand 复制出错:', err)
     ElMessage.error('复制失败，请手动复制')
+  } finally {
+    // 清理临时元素
+    document.body.removeChild(textArea)
   }
 }
 
@@ -170,7 +184,22 @@ onUnmounted(() => {
                 {{ formatDate(scope.row.UpdatedAt) }}
               </template>
             </el-table-column>
-            <el-table-column prop="UID" label="任务编号" align="center" header-align="center" width="280" />
+            <el-table-column label="状态" prop="Status" align="center" header-align="center" width="100">
+              <template #default="scope">
+                <el-tag v-if="scope.row.Status === 'open'" type="success" size="small">进行中</el-tag>
+                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small">已关闭</el-tag>
+                <el-tag v-else type="info" size="small">未知</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="运行状态" prop="State" align="center" header-align="center" width="100">
+              <template #default="scope">
+                <el-tag v-if="scope.row.State === 'running'" type="success" size="small">运行中</el-tag>
+                <el-tag v-else-if="scope.row.State === 'stopped'" type="warning" size="small">已停止</el-tag>
+                <el-tag v-else-if="scope.row.State === 'error'" type="danger" size="small">错误</el-tag>
+                <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
+              </template>
+            </el-table-column>
+            <!-- <el-table-column prop="UID" label="任务编号" align="center" header-align="center" width="280" /> -->
             <el-table-column prop="LinkedAddress" label="关联地址" align="center" header-align="center" width="300">
               <template #default="scope">
                 <div class="flex items-center justify-between">
@@ -211,21 +240,7 @@ onUnmounted(() => {
                 <el-tag v-else type="default" size="small">{{ scope.row.Priority }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="状态" prop="Status" align="center" header-align="center" width="100">
-              <template #default="scope">
-                <el-tag v-if="scope.row.Status === 'open'" type="success" size="small">进行中</el-tag>
-                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small">已关闭</el-tag>
-                <el-tag v-else type="info" size="small">未知</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="运行状态" prop="State" align="center" header-align="center" width="100">
-              <template #default="scope">
-                <el-tag v-if="scope.row.State === 'running'" type="success" size="small">运行中</el-tag>
-                <el-tag v-else-if="scope.row.State === 'stopped'" type="warning" size="small">已停止</el-tag>
-                <el-tag v-else-if="scope.row.State === 'error'" type="danger" size="small">错误</el-tag>
-                <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
-              </template>
-            </el-table-column>
+
 
             <el-table-column label="日志" align="center" header-align="center" width="80" fixed="right">
               <template #default="scope">

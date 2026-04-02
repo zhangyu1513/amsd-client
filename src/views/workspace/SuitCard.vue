@@ -172,7 +172,7 @@ const closeAddProcess = () => {
                     </el-icon>
                     <span class="ml-1">子单</span>
                   </el-button> -->
-                  <el-button type="success" size="small" link @click="openAddProcess(scope.row)">
+                  <el-button type="primary" size="small" link @click="openAddProcess(scope.row)">
                     <el-icon>
                       <MessageBox />
                     </el-icon>
