@@ -267,24 +267,14 @@ onUnmounted(() => {
                 <el-tag v-else type="default" size="small">{{ scope.row.Priority }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="日志" align="center" header-align="center" width="80" fixed="right">
-              <template #default="scope">
-                <div class="flex justify-center space-x-1">
-                  <el-button type="primary" size="small" link @click="viewLog(scope.row.ID)">
-                    <el-icon>
-                      <Tickets />
-                    </el-icon>
-                  </el-button>
-                </div>
-              </template>
-            </el-table-column>
             <el-table-column label="操作" align="center" header-align="center" width="300" fixed="right">
               <template #default="scope">
                 <div class="flex justify-center space-x-1">
                   <el-button type="primary" size="small" link @click="" disabled>
                     LVL
                   </el-button>
-                  <el-button type="primary" size="small" link @click="openAddFractureDialog(scope.row)">
+                  <el-button type="primary" size="small" link @click="openAddFractureDialog(scope.row)"
+                    :disabled="scope.row.State != 'completed' || scope.row.Status === 'close'">
                     Fracture
                   </el-button>
                   <el-button type="primary" size="small" link @click="" disabled>

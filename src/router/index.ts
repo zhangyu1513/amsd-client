@@ -96,7 +96,7 @@ const routes: AppRouteRecordRaw[] = [
             meta: {
               title: 'LVL任务',
               icon: 'MessageBox',
-              showInMenu: true,
+              showInMenu: false,
               order: 3,
               breadcrumb: ['工作空间', 'LVL任务'],
               requiresAuth: true,
@@ -122,7 +122,7 @@ const routes: AppRouteRecordRaw[] = [
             meta: {
               title: 'MRC任务',
               icon: 'MessageBox',
-              showInMenu: true,
+              showInMenu: false,
               order: 5,
               breadcrumb: ['工作空间', 'MRC任务'],
               requiresAuth: true,
@@ -135,7 +135,7 @@ const routes: AppRouteRecordRaw[] = [
             meta: {
               title: '透光率任务',
               icon: 'MessageBox',
-              showInMenu: true,
+              showInMenu: false,
               order: 6,
               breadcrumb: ['工作空间', '透光率任务'],
               requiresAuth: true,

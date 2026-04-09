@@ -193,7 +193,23 @@ onUnmounted(() => {
                 <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="UID" label="转档编号" align="center" header-align="center" width="280" />
+            <el-table-column prop="LocalAddress" label="本地地址" align="center" header-align="center" width="500">
+              <template #default="scope">
+                <div class="flex items-center justify-between">
+                  <span class="truncate flex-1 mr-2" :title="scope.row.LocalAddress">
+                    {{ scope.row.LocalAddress || '-' }}
+                  </span>
+                  <el-button v-if="scope.row.LocalAddress" type="text" size="small" class="copy-btn"
+                    @click.stop="copyToClipboard(scope.row.LocalAddress)">
+                    <el-icon>
+                      <CopyDocument />
+                    </el-icon>
+                  </el-button>
+                </div>
+              </template>
+            </el-table-column>
+
+            <!-- <el-table-column prop="UID" label="转档编号" align="center" header-align="center" width="280" /> -->
             <el-table-column prop="EDA" label="EDA" align="center" header-align="center" width="120" />
             <el-table-column prop="Threads" label="线程数" align="center" header-align="center" width="80" />
             <el-table-column prop="Priority" label="优先级" align="center" header-align="center" width="80">
@@ -215,33 +231,6 @@ onUnmounted(() => {
                     @click.stop="copyToClipboard(scope.row.Classify)">
                     <el-icon>
                       <CopyDocument />
-                    </el-icon>
-                  </el-button>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="LocalAddress" label="本地地址" align="center" header-align="center" width="500">
-              <template #default="scope">
-                <div class="flex items-center justify-between">
-                  <span class="truncate flex-1 mr-2" :title="scope.row.LocalAddress">
-                    {{ scope.row.LocalAddress || '-' }}
-                  </span>
-                  <el-button v-if="scope.row.LocalAddress" type="text" size="small" class="copy-btn"
-                    @click.stop="copyToClipboard(scope.row.LocalAddress)">
-                    <el-icon>
-                      <CopyDocument />
-                    </el-icon>
-                  </el-button>
-                </div>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="日志" align="center" header-align="center" width="80" fixed="right">
-              <template #default="scope">
-                <div class="flex justify-center space-x-1">
-                  <el-button type="primary" size="small" link @click="viewLog(scope.row.ID)">
-                    <el-icon>
-                      <Tickets />
                     </el-icon>
                   </el-button>
                 </div>

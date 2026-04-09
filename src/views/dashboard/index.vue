@@ -28,22 +28,22 @@ const stats = ref({
 // 从mock接口获取统计数据
 const fetchStats = async () => {
   loading.value = true
-  try {
-    const response = await fetch('/api/dashboard/stats')
-    const result = await response.json()
-    
-    if (result.code === 200) {
-      stats.value = result.data
-      ElMessage.success(result.message || '数据加载成功')
-    } else {
-      ElMessage.error(result.message || '获取数据失败')
-    }
-  } catch (error) {
-    console.error('获取统计数据失败:', error)
-    ElMessage.error('网络错误，获取数据失败')
-  } finally {
-    loading.value = false
-  }
+  // try {
+  //   const response = await fetch('/api/dashboard/stats')
+  //   const result = await response.json()
+
+  //   if (result.code === 200) {
+  //     stats.value = result.data
+  //     ElMessage.success(result.message || '数据加载成功')
+  //   } else {
+  //     ElMessage.error(result.message || '获取数据失败')
+  //   }
+  // } catch (error) {
+  //   console.error('获取统计数据失败:', error)
+  //   ElMessage.error('网络错误，获取数据失败')
+  // } finally {
+  //   loading.value = false
+  // }
 }
 
 // 刷新数据
@@ -57,22 +57,24 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-6 p-2">
     <!-- 页面标题 -->
-    <div class="flex items-center justify-between">
+    <!-- <div class="flex items-center justify-between">
       <div>
         <h1 class="text-2xl font-bold text-gray-800">仪表盘</h1>
         <p class="text-gray-500 mt-1">系统概览与统计数据</p>
       </div>
       <el-button type="primary" :icon="Refresh" @click="handleRefresh">刷新</el-button>
-    </div>
+    </div> -->
 
     <!-- 统计卡片 -->
     <div v-loading="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <el-card shadow="hover" class="cursor-pointer transition-all hover:shadow-lg">
         <div class="flex items-center">
           <div class="p-3 rounded-lg bg-blue-100 text-blue-600 mr-4">
-            <el-icon size="24"><Folder /></el-icon>
+            <el-icon size="24">
+              <Folder />
+            </el-icon>
           </div>
           <div>
             <p class="text-sm text-gray-500">套单总数</p>
@@ -84,7 +86,9 @@ onMounted(() => {
       <el-card shadow="hover" class="cursor-pointer transition-all hover:shadow-lg">
         <div class="flex items-center">
           <div class="p-3 rounded-lg bg-green-100 text-green-600 mr-4">
-            <el-icon size="24"><DocumentCopy /></el-icon>
+            <el-icon size="24">
+              <DocumentCopy />
+            </el-icon>
           </div>
           <div>
             <p class="text-sm text-gray-500">子单总数</p>
@@ -96,7 +100,9 @@ onMounted(() => {
       <el-card shadow="hover" class="cursor-pointer transition-all hover:shadow-lg">
         <div class="flex items-center">
           <div class="p-3 rounded-lg bg-purple-100 text-purple-600 mr-4">
-            <el-icon size="24"><Setting /></el-icon>
+            <el-icon size="24">
+              <Setting />
+            </el-icon>
           </div>
           <div>
             <p class="text-sm text-gray-500">处理任务</p>
@@ -108,7 +114,9 @@ onMounted(() => {
       <el-card shadow="hover" class="cursor-pointer transition-all hover:shadow-lg">
         <div class="flex items-center">
           <div class="p-3 rounded-lg bg-orange-100 text-orange-600 mr-4">
-            <el-icon size="24"><Clock /></el-icon>
+            <el-icon size="24">
+              <Clock />
+            </el-icon>
           </div>
           <div>
             <p class="text-sm text-gray-500">进行中任务</p>
@@ -133,7 +141,9 @@ onMounted(() => {
         </template>
         <div class="h-64 flex items-center justify-center text-gray-400">
           <div class="text-center">
-            <el-icon size="48" class="mb-2"><TrendCharts /></el-icon>
+            <el-icon size="48" class="mb-2">
+              <TrendCharts />
+            </el-icon>
             <p>图表组件待实现</p>
           </div>
         </div>
@@ -152,7 +162,9 @@ onMounted(() => {
         </template>
         <div class="h-64 flex items-center justify-center text-gray-400">
           <div class="text-center">
-            <el-icon size="48" class="mb-2"><PieChart /></el-icon>
+            <el-icon size="48" class="mb-2">
+              <PieChart />
+            </el-icon>
             <p>图表组件待实现</p>
           </div>
         </div>
@@ -178,7 +190,9 @@ onMounted(() => {
         </el-table-column>
       </el-table>
       <div class="text-center py-4 text-gray-400">
-        <el-icon size="24" class="mb-2"><List /></el-icon>
+        <el-icon size="24" class="mb-2">
+          <List />
+        </el-icon>
         <p>暂无活动记录</p>
       </div>
     </el-card>
