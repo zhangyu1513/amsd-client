@@ -1,0 +1,117 @@
+/* 表格公共样式 - 全局启用 */
+
+/* 科技感表格基础样式 */
+.tech-table {
+  position: relative;
+}
+
+.table-loading {
+  opacity: 0.7;
+  filter: blur(1px);
+}
+
+/* 数据行进入动画 - 使用CSS变量实现动态延迟 */
+.tech-table[data-version] :deep(.el-table__row) {
+  --row-index: 0;
+  animation: row-fade-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) calc(var(--row-index) * 0.1s) forwards;
+  opacity: 0;
+}
+
+@keyframes row-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 表格悬停效果 */
+.tech-table :deep(.el-table__row:hover) {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.03) 100%);
+  transform: translateX(2px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 表格边框科技感 */
+.tech-table :deep(.el-table) {
+  --el-table-border-color: rgba(59, 130, 246, 0.3);
+  --el-table-border: 1px solid var(--el-table-border-color);
+}
+
+.tech-table :deep(.el-table th) {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+  color: #e2e8f0;
+  font-weight: 600;
+  border-bottom: 2px solid rgba(59, 130, 246, 0.5);
+}
+
+.tech-table :deep(.el-table td) {
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* 分页组件样式 */
+.pagination-compact :deep(.el-pagination) {
+  height: 24px;
+  line-height: 24px;
+}
+
+.pagination-compact :deep(.el-pagination__total),
+.pagination-compact :deep(.el-pagination__sizes),
+.pagination-compact :deep(.el-pagination__jump),
+.pagination-compact :deep(.el-pagination__prev),
+.pagination-compact :deep(.el-pagination__next),
+.pagination-compact :deep(.el-pagination__pager) {
+  height: 24px;
+  line-height: 24px;
+}
+
+.pagination-compact :deep(.el-pagination button),
+.pagination-compact :deep(.el-pagination .btn-prev),
+.pagination-compact :deep(.el-pagination .btn-next) {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.pagination-compact :deep(.el-pagination .el-pager li) {
+  height: 24px;
+  min-width: 24px;
+  line-height: 24px;
+}
+
+.pagination-compact :deep(.el-pagination .el-input__wrapper) {
+  height: 24px;
+}
+
+.pagination-compact :deep(.el-pagination .el-input__inner) {
+  height: 24px;
+  line-height: 24px;
+}
+
+/* 复制按钮样式 */
+.tech-table :deep(.copy-btn) {
+  padding: 2px;
+  min-width: 24px;
+  height: 24px;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.tech-table :deep(.copy-btn:hover) {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.tech-table :deep(.copy-btn .el-icon) {
+  font-size: 14px;
+}
+
+/* 文本截断样式 */
+.tech-table :deep(.truncate) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
