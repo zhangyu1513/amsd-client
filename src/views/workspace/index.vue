@@ -1,0 +1,165 @@
+<script setup lang="ts">
+import { ref, onMounted, computed, watch } from 'vue'
+import { ElMessage } from 'element-plus'
+import { MessageBox, Tickets } from '@element-plus/icons-vue'
+import { api } from '@/api'
+import type { PaginationParams, Suit, SuitSearchParams } from '@/api/types'
+import ProcessCard from './ProcessCard.vue'
+import AddProcess from './components/AddProcess.vue'
+
+// 表格数据
+const tableData = ref<Suit[]>([])
+const tableLoading = ref(false)
+
+// 展开行 ID（实现一次只展开一行）
+const expandedRowKeys = ref<(string | number)[]>([])
+const toggleRowExpansion = (row: Suit) => {
+  const key = row.ID ?? ''
+  if (expandedRowKeys.value.includes(key)) {
+    expandedRowKeys.value = []
+  } else {
+    expandedRowKeys.value = [key]
+  }
+}
+
+// 数据版本号 - 用于触发动画
+const dataVersion = ref(0)
+
+const searchForm = ref<Suit>({})
+
+const paginationForm = ref<PaginationParams>({
+  Page: 1,
+  PageSize: 20,
+})
+
+const total = ref(0)
+
+// 搜索参数 - 使用类型安全的 SuitSearchParams
+const searchParams = computed<SuitSearchParams>(() => {
+  return {
+    ...paginationForm.value,
+    ...searchForm.value,
+  }
+})
+
+// 从API获取套单数据
+const listSuits = async () => {
+  tableLoading.value = true
+  try {
+    const response = await api.suit.getSuits(searchParams.value)
+    tableData.value = []
+    dataVersion.value++
+    tableData.value = response.list
+    total.value = response.total
+  } catch (error) {
+    console.error('获取套单数据失败:', error)
+    ElMessage.error('获取数据失败，请检查网络连接')
+  } finally {
+    tableLoading.value = false
+  }
+}
+
+// 处理分页变化
+const handlePageChange = (page: number) => {
+  paginationForm.value.Page = page
+  listSuits()
+}
+
+// 处理每页显示数量变化
+const handleSizeChange = (size: number) => {
+  paginationForm.value.PageSize = size
+  paginationForm.value.Page = 1
+  listSuits()
+}
+
+watch(tableData, () => {
+  dataVersion.value++
+})
+
+onMounted(() => {
+  listSuits()
+})
+
+const addProcessFlag = ref(false)
+const addProcessParam = ref<Suit>({})
+
+const openAddProcess = (suit: Suit) => {
+  addProcessFlag.value = true
+  addProcessParam.value = suit
+}
+
+const closeAddProcess = () => {
+  addProcessFlag.value = false
+}
+</script>
+
+<template>
+  <el-row class="w-full h-full">
+    <el-col :span="24" class="h-full">
+      <!-- 表格和分页容器 -->
+      <div class="h-full flex flex-col">
+        <!-- 工具栏 -->
+        <div class="flex items-center justify-between mb-2">
+          <!-- 工具栏留空，已移除刷新按钮 -->
+        </div>
+
+        <!-- 表格区域 - 占据剩余高度 -->
+        <div class="flex-1 min-h-0 relative">
+          <el-table :data="tableData" border show-overflow-tooltip v-loading="tableLoading" size="small"
+            class="w-full tech-table" height="100%" :class="{ 'table-loading': tableLoading }"
+            :data-version="dataVersion" row-key="ID" :expand-row-keys="expandedRowKeys"
+            @expand-change="toggleRowExpansion">
+            <el-table-column type="expand" width="40">
+              <template #default="props">
+                <ProcessCard :suit-id="props.row.ID" />
+              </template>
+            </el-table-column>
+            <el-table-column type="index" label="#" align="center" header-align="center" width="50">
+              <template #default="{ $index }">
+                <span :style="{ '--row-index': $index }">{{ $index + 1 }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" header-align="center" width="100">
+              <template #default="scope">
+                <div class="flex justify-center space-x-1" :style="{ '--row-index': scope.$index }">
+                  <el-button type="primary" size="small" link @click="openAddProcess(scope.row)">
+                    <el-icon>
+                      <MessageBox />
+                    </el-icon>
+                    <span class="ml-1">处理</span>
+                  </el-button>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="Number" label="套单编号" align="center" header-align="center" width="140">
+              <template #default="{ row, $index }">
+                <span :style="{ '--row-index': $index }">{{ row.Number }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="CustomerCode" label="客户编号" align="center" header-align="center" width="120" />
+            <el-table-column prop="CustomerName" label="客户名称" align="center" header-align="center" />
+            <el-table-column label="生命周期" prop="Status" align="center" header-align="center" width="100">
+              <template #default="scope">
+                <el-tag v-if="scope.row.Status === 'open'" type="success" size="small">OPEN</el-tag>
+                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small">CLOSE</el-tag>
+                <el-tag v-else type="info" size="small">未知</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="Saler" label="锁定人员" align="center" header-align="center" width="100" />
+
+          </el-table>
+        </div>
+
+        <!-- 分页组件 - 固定高度24px -->
+        <div class="h-6 shrink-0 flex items-center justify-center mt-2 mb-2">
+          <el-pagination v-model:current-page="paginationForm.Page" v-model:page-size="paginationForm.PageSize"
+            :page-sizes="[5, 10, 20, 50]" size="small" :background="true"
+            layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+            @current-change="handlePageChange" class="justify-center pagination-compact" />
+        </div>
+      </div>
+    </el-col>
+    <!-- AddProcess组件 -->
+    <AddProcess :visible="addProcessFlag" :suit="addProcessParam" @close="closeAddProcess" />
+  </el-row>
+</template>
