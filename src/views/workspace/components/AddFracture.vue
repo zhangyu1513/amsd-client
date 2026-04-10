@@ -19,9 +19,6 @@ const fracture = reactive<Fracture>({
     Type: "total"
 })
 const loading = ref(false)
-const processDetail = ref<Process>({})
-const orderSelectionType = ref<'total' | 'single'>('total')
-const selectedOrders = ref<string[]>([])
 
 // 定义组件Emits
 const emit = defineEmits(["close"])
@@ -30,49 +27,35 @@ const emit = defineEmits(["close"])
 const formRef = ref<FormInstance>()
 
 // 计算属性：获取process中的订单列表
-const processOrders = computed(() => {
-    if (!processDetail.value.Orders) return []
+// const processOrders = computed(() => {
+//     if (!processDetail.value.Orders) return []
 
-    // Orders字段可能是字符串，需要解析
-    const ordersStr = processDetail.value.Orders
-    if (typeof ordersStr === 'string') {
-        return ordersStr.split(';').filter(order => order.trim())
-    }
-    return []
-})
+//     // Orders字段可能是字符串，需要解析
+//     const ordersStr = processDetail.value.Orders
+//     if (typeof ordersStr === 'string') {
+//         return ordersStr.split(';').filter(order => order.trim())
+//     }
+//     return []
+// })
 
 // 加载process详情
-const loadProcessDetail = async () => {
-    if (!props.process.ID) {
-        ElMessage.error('Process ID不能为空')
-        return
-    }
+// const loadProcessDetail = async () => {
+//     if (!props.process.ID) {
+//         ElMessage.error('Process ID不能为空')
+//         return
+//     }
 
-    loading.value = true
-    try {
-        const response = await api.process.getProcess({ ID: props.process.ID })
-        processDetail.value = response
-    } catch (err) {
-        console.error('加载Process详情失败:', err)
-        ElMessage.error('获取Process数据失败，请检查网络连接')
-    } finally {
-        loading.value = false
-    }
-}
-
-// 监听订单选择类型变化
-watch(orderSelectionType, (newVal) => {
-    if (newVal === 'total') {
-        selectedOrders.value = []
-    }
-})
-
-// 表单验证规则
-const rules = reactive<FormRules>({
-    Format: [
-        { required: true, message: '请选择Format格式', trigger: 'change' }
-    ]
-})
+//     loading.value = true
+//     try {
+//         const response = await api.process.getProcess({ ID: props.process.ID })
+//         processDetail.value = response
+//     } catch (err) {
+//         console.error('加载Process详情失败:', err)
+//         ElMessage.error('获取Process数据失败，请检查网络连接')
+//     } finally {
+//         loading.value = false
+//     }
+// }
 
 // 关闭Dialog
 const handleClose = () => {
@@ -84,8 +67,6 @@ const handleClose = () => {
 const resetForm = () => {
     fracture.Format = 'OASIS'
     fracture.Type = 'total'
-    selectedOrders.value = []
-    formRef.value?.clearValidate()
 }
 
 // 提交表单
@@ -141,7 +122,6 @@ watch(() => props.visible, (newVal) => {
     dialogVisible.value = props.visible
     if (newVal) {
         resetForm()
-        loadProcessDetail()
     }
 })
 
@@ -151,37 +131,22 @@ watch(() => props.visible, (newVal) => {
     <el-dialog v-model="dialogVisible" title="添加转档任务" width="500px" :close-on-click-modal="false"
         :close-on-press-escape="false" :show-close="false" draggable @close="handleClose">
         <!-- 表单内容 -->
-        <el-form ref="formRef" :model="fracture" :rules="rules" size="small" label-width="120px" label-position="top"
+        <el-form ref="formRef" :model="fracture" size="small" label-width="120px" label-position="top"
             class="w-full pl-2 pr-2">
             <!-- 参数3: Format选择 -->
             <el-form-item label="Format" prop="Format" class="w-full" disabled>
                 <el-radio-group v-model="fracture.Format">
-                    <el-radio label="OASIS">OASIS</el-radio>
-                    <el-radio label="GDSII">GDSII</el-radio>
+                    <el-radio value="OASIS">OASIS</el-radio>
+                    <el-radio value="GDSII">GDSII</el-radio>
                 </el-radio-group>
             </el-form-item>
             <!-- 参数1: 订单选择-所有/单张 -->
-            <el-form-item label="订单选择" prop="orderSelectionType" class="w-full" :disabled="true">
-                <el-radio-group v-model="orderSelectionType" :disabled="true">
-                    <el-radio label="all">所有</el-radio>
-                    <el-radio label="single">单张</el-radio>
+            <el-form-item label="转档类型" prop="Type" class="w-full">
+                <el-radio-group v-model="fracture.Type">
+                    <el-radio value="total">所有订单合并为一个总版图</el-radio>
+                    <el-radio value="single">每个订单单独生成每个版图</el-radio>
                 </el-radio-group>
             </el-form-item>
-
-            <!-- 参数2: 订单多选（仅当选择单张时显示） -->
-            <el-form-item v-if="orderSelectionType === 'single'" label="选择订单" prop="selectedOrders" class="w-full"
-                :disabled="true">
-                <el-select v-model="selectedOrders" multiple placeholder="请选择订单" style="width: 100%"
-                    :disabled="loading || processOrders.length === 0">
-                    <el-option v-for="order in processOrders" :key="order" :label="order" :value="order" />
-                </el-select>
-                <div v-if="loading" class="text-sm text-gray-500 mt-1">加载中...</div>
-                <div v-else-if="processOrders.length === 0" class="text-sm text-gray-500 mt-1">
-                    该Process暂无订单数据
-                </div>
-            </el-form-item>
-
-
         </el-form>
 
         <!-- 底部按钮 -->
