@@ -15,11 +15,12 @@ const props = defineProps<Props>()
 
 // 响应式数据
 const fracture = reactive<Fracture>({
-    Format: 'OASIS' // 默认值
+    Format: 'OASIS', // 默认值
+    Type: "total"
 })
 const loading = ref(false)
 const processDetail = ref<Process>({})
-const orderSelectionType = ref<'all' | 'single'>('all')
+const orderSelectionType = ref<'total' | 'single'>('total')
 const selectedOrders = ref<string[]>([])
 
 // 定义组件Emits
@@ -61,7 +62,7 @@ const loadProcessDetail = async () => {
 
 // 监听订单选择类型变化
 watch(orderSelectionType, (newVal) => {
-    if (newVal === 'all') {
+    if (newVal === 'total') {
         selectedOrders.value = []
     }
 })
@@ -82,7 +83,7 @@ const handleClose = () => {
 // 重置表单
 const resetForm = () => {
     fracture.Format = 'OASIS'
-    orderSelectionType.value = 'all'
+    fracture.Type = 'total'
     selectedOrders.value = []
     formRef.value?.clearValidate()
 }

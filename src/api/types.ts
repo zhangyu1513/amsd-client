@@ -104,6 +104,7 @@ export interface Fracture {
   UpdatedAt?: Date
   DeletedAt?: Date
 
+  Type?: string // total/single
   UID?: string // 转档编号，not null
 
   EDA?: string
