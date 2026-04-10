@@ -224,7 +224,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <el-dialog v-model="dialogVisible" title="添加转档任务" width="80%" :z-index="99999" :close-on-click-modal="false"
+  <el-dialog v-model="dialogVisible" title="转档任务" width="80%" :z-index="99999" :close-on-click-modal="false"
     :close-on-press-escape="false" draggable @close="handleClose">
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">

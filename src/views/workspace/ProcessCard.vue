@@ -15,8 +15,7 @@ import {
 } from '@element-plus/icons-vue'
 import { api } from '@/api'
 import type { PaginationParams, Process, ProcessSearchParams } from '@/api/types'
-import Log from './components/Log.vue'
-import AddFracture from './components/AddFracture.vue'
+import ShowFracture from './components/ShowFracture.vue'
 
 const props = defineProps<{
   suitId?: number
@@ -204,8 +203,8 @@ onUnmounted(() => { })
 
         <!-- 表格区域 - 占据剩余高度 -->
         <div class="flex-1 min-h-0 relative">
-          <el-table :data="tableData" border show-overflow-tooltip v-loading="tableLoading" default-expand-all
-            size="small" class="w-full tech-table" height="100%" :class="{ 'table-loading': tableLoading }"
+          <el-table :data="tableData" show-overflow-tooltip v-loading="tableLoading" default-expand-all size="small"
+            class="w-full tech-table" height="100%" :class="{ 'table-loading': tableLoading }"
             :data-version="dataVersion">
             <el-table-column type="index" label="#" align="center" header-align="center" width="50" />
             <el-table-column prop="CreatedAt" label="创建时间" align="center" header-align="center" width="160">
@@ -305,6 +304,6 @@ onUnmounted(() => { })
     </el-col>
   </el-row>
 
-  <!-- AddFracture 组件 -->
-  <AddFracture :visible="showAddFractureDialog" :process="selectedProcess" @close="closeAddFractureDialog" />
+  <!-- ShowFracture 组件 -->
+  <ShowFracture :visible="showAddFractureDialog" :process="selectedProcess" @close="closeAddFractureDialog" />
 </template>
