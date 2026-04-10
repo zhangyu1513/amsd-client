@@ -137,7 +137,7 @@ watch(() => props.visible, (newVal) => {
             <el-form-item label="Format" prop="Format" class="w-full" disabled>
                 <el-radio-group v-model="fracture.Format">
                     <el-radio value="OASIS">OASIS</el-radio>
-                    <el-radio value="GDSII">GDSII</el-radio>
+                    <el-radio value="GDS2">GDS2</el-radio>
                 </el-radio-group>
             </el-form-item>
             <!-- 参数1: 订单选择-所有/单张 -->
