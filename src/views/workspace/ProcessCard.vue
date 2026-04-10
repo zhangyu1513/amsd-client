@@ -82,9 +82,9 @@ const listProcesses = async () => {
     tableData.value = []
     // 使用nextTick确保DOM更新后再设置新数据
     await nextTick()
-    tableData.value = response.List
+    tableData.value = response.list
     console.log('获取处理任务数据成功:', response)
-    total.value = response.Total
+    total.value = response.total
   } catch (error) {
     console.error('获取处理任务数据失败:', error)
     ElMessage.error('获取数据失败，请检查网络连接')

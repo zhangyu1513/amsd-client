@@ -37,8 +37,8 @@ const listSuits = async () => {
     const response = await api.suit.getSuits(searchParams.value)
     tableData.value = []
     dataVersion.value++
-    tableData.value = response.List
-    total.value = response.Total
+    tableData.value = response.list
+    total.value = response.total
   } catch (error) {
     console.error('获取套单数据失败:', error)
     ElMessage.error('获取数据失败，请检查网络连接')
@@ -93,76 +93,30 @@ const closeAddProcess = () => {
 
         <!-- 表格区域 - 占据剩余高度 -->
         <div class="flex-1 min-h-0 relative">
-          <el-table
-            :data="tableData"
-            border
-            show-overflow-tooltip
-            v-loading="tableLoading"
-            default-expand-all
-            size="small"
-            class="w-full tech-table"
-            height="100%"
-            :class="{ 'table-loading': tableLoading }"
-            :data-version="dataVersion"
-          >
+          <el-table :data="tableData" border show-overflow-tooltip v-loading="tableLoading" default-expand-all
+            size="small" class="w-full tech-table" height="100%" :class="{ 'table-loading': tableLoading }"
+            :data-version="dataVersion">
             <el-table-column type="index" label="#" align="center" header-align="center" width="50">
               <template #default="{ $index }">
                 <span :style="{ '--row-index': $index }">{{ $index + 1 }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="Number"
-              label="套单编号"
-              align="center"
-              header-align="center"
-              width="140"
-            >
+            <el-table-column prop="Number" label="套单编号" align="center" header-align="center" width="140">
               <template #default="{ row, $index }">
                 <span :style="{ '--row-index': $index }">{{ row.Number }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="CustomerCode"
-              label="客户编号"
-              align="center"
-              header-align="center"
-              width="120"
-            />
-            <el-table-column
-              prop="CustomerName"
-              label="客户名称"
-              align="center"
-              header-align="center"
-            />
-            <el-table-column
-              label="生命周期"
-              prop="Status"
-              align="center"
-              header-align="center"
-              width="100"
-            >
+            <el-table-column prop="CustomerCode" label="客户编号" align="center" header-align="center" width="120" />
+            <el-table-column prop="CustomerName" label="客户名称" align="center" header-align="center" />
+            <el-table-column label="生命周期" prop="Status" align="center" header-align="center" width="100">
               <template #default="scope">
                 <el-tag v-if="scope.row.Status === 'open'" type="success" size="small">OPEN</el-tag>
-                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small"
-                  >CLOSE</el-tag
-                >
+                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small">CLOSE</el-tag>
                 <el-tag v-else type="info" size="small">未知</el-tag>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="Saler"
-              label="锁定人员"
-              align="center"
-              header-align="center"
-              width="100"
-            />
-            <el-table-column
-              label="操作"
-              align="center"
-              header-align="center"
-              width="160"
-              fixed="right"
-            >
+            <el-table-column prop="Saler" label="锁定人员" align="center" header-align="center" width="100" />
+            <el-table-column label="操作" align="center" header-align="center" width="160" fixed="right">
               <template #default="scope">
                 <div class="flex justify-center space-x-1" :style="{ '--row-index': scope.$index }">
                   <!-- <el-button type="primary" size="small" link @click="toOrders(scope.row.ID)" disabled>
@@ -185,18 +139,10 @@ const closeAddProcess = () => {
 
         <!-- 分页组件 - 固定高度24px -->
         <div class="h-6 shrink-0 flex items-center justify-center mt-2 mb-2">
-          <el-pagination
-            v-model:current-page="paginationForm.Page"
-            v-model:page-size="paginationForm.PageSize"
-            :page-sizes="[5, 10, 20, 50]"
-            :small="true"
-            :background="true"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handlePageChange"
-            class="justify-center pagination-compact"
-          />
+          <el-pagination v-model:current-page="paginationForm.Page" v-model:page-size="paginationForm.PageSize"
+            :page-sizes="[5, 10, 20, 50]" :small="true" :background="true"
+            layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+            @current-change="handlePageChange" class="justify-center pagination-compact" />
         </div>
       </div>
     </el-col>

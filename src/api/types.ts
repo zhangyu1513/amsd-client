@@ -17,10 +17,10 @@ export interface PaginationParams {
 
 // 分页响应
 export interface PaginatedResponse<T> {
-  List: T[]
-  Total: number
-  Page: number
-  PageSize: number
+  list: T[]
+  total: number
+  page: number
+  pageSize: number
 }
 
 export interface Suit {

@@ -70,9 +70,9 @@ const listFractures = async () => {
     tableData.value = []
     // 使用nextTick确保DOM更新后再设置新数据
     await nextTick()
-    tableData.value = response.List
+    tableData.value = response.list
     console.log('获取断裂分析数据成功:', response)
-    total.value = response.Total
+    total.value = response.total
   } catch (error) {
     console.error('获取断裂分析数据失败:', error)
     ElMessage.error('获取数据失败，请检查网络连接')
@@ -164,7 +164,7 @@ onMounted(() => {
   listFractures()
 })
 
-onUnmounted(() => {})
+onUnmounted(() => { })
 </script>
 
 <template>
@@ -179,103 +179,43 @@ onUnmounted(() => {})
 
         <!-- 表格区域 - 占据剩余高度 -->
         <div class="flex-1 min-h-0 relative">
-          <el-table
-            :data="tableData"
-            border
-            show-overflow-tooltip
-            v-loading="tableLoading"
-            default-expand-all
-            size="small"
-            class="w-full tech-table"
-            height="100%"
-            :class="{ 'table-loading': tableLoading }"
-            :data-version="dataVersion"
-          >
-            <el-table-column
-              type="index"
-              label="#"
-              align="center"
-              header-align="center"
-              width="50"
-            />
-            <el-table-column
-              prop="CreatedAt"
-              label="创建时间"
-              align="center"
-              header-align="center"
-              width="160"
-            >
+          <el-table :data="tableData" border show-overflow-tooltip v-loading="tableLoading" default-expand-all
+            size="small" class="w-full tech-table" height="100%" :class="{ 'table-loading': tableLoading }"
+            :data-version="dataVersion">
+            <el-table-column type="index" label="#" align="center" header-align="center" width="50" />
+            <el-table-column prop="CreatedAt" label="创建时间" align="center" header-align="center" width="160">
               <template #default="scope">
                 {{ formatDate(scope.row.CreatedAt) }}
               </template>
             </el-table-column>
-            <el-table-column
-              prop="UpdatedAt"
-              label="更新时间"
-              align="center"
-              header-align="center"
-              width="160"
-            >
+            <el-table-column prop="UpdatedAt" label="更新时间" align="center" header-align="center" width="160">
               <template #default="scope">
                 {{ formatDate(scope.row.UpdatedAt) }}
               </template>
             </el-table-column>
-            <el-table-column
-              label="状态"
-              prop="Status"
-              align="center"
-              header-align="center"
-              width="100"
-            >
+            <el-table-column label="状态" prop="Status" align="center" header-align="center" width="100">
               <template #default="scope">
-                <el-tag v-if="scope.row.Status === 'open'" type="success" size="small"
-                  >进行中</el-tag
-                >
-                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small"
-                  >已关闭</el-tag
-                >
+                <el-tag v-if="scope.row.Status === 'open'" type="success" size="small">进行中</el-tag>
+                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small">已关闭</el-tag>
                 <el-tag v-else type="info" size="small">未知</el-tag>
               </template>
             </el-table-column>
-            <el-table-column
-              label="运行状态"
-              prop="State"
-              align="center"
-              header-align="center"
-              width="100"
-            >
+            <el-table-column label="运行状态" prop="State" align="center" header-align="center" width="100">
               <template #default="scope">
-                <el-tag v-if="scope.row.State === 'completed'" type="success" size="small"
-                  >已完成</el-tag
-                >
-                <el-tag v-else-if="scope.row.State === 'failed'" type="danger" size="small"
-                  >错误</el-tag
-                >
-                <el-tag v-else-if="scope.row.State === 'running'" type="warning" size="small"
-                  >运行中</el-tag
-                >
+                <el-tag v-if="scope.row.State === 'completed'" type="success" size="small">已完成</el-tag>
+                <el-tag v-else-if="scope.row.State === 'failed'" type="danger" size="small">错误</el-tag>
+                <el-tag v-else-if="scope.row.State === 'running'" type="warning" size="small">运行中</el-tag>
                 <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="LocalAddress"
-              label="本地地址"
-              align="center"
-              header-align="center"
-              width="500"
-            >
+            <el-table-column prop="LocalAddress" label="本地地址" align="center" header-align="center" width="500">
               <template #default="scope">
                 <div class="flex items-center justify-between">
                   <span class="truncate flex-1 mr-2" :title="scope.row.LocalAddress">
                     {{ scope.row.LocalAddress || '-' }}
                   </span>
-                  <el-button
-                    v-if="scope.row.LocalAddress"
-                    type="text"
-                    size="small"
-                    class="copy-btn"
-                    @click.stop="copyToClipboard(scope.row.LocalAddress)"
-                  >
+                  <el-button v-if="scope.row.LocalAddress" type="text" size="small" class="copy-btn"
+                    @click.stop="copyToClipboard(scope.row.LocalAddress)">
                     <el-icon>
                       <CopyDocument />
                     </el-icon>
@@ -285,27 +225,9 @@ onUnmounted(() => {})
             </el-table-column>
 
             <!-- <el-table-column prop="UID" label="转档编号" align="center" header-align="center" width="280" /> -->
-            <el-table-column
-              prop="EDA"
-              label="EDA"
-              align="center"
-              header-align="center"
-              width="120"
-            />
-            <el-table-column
-              prop="Threads"
-              label="线程数"
-              align="center"
-              header-align="center"
-              width="80"
-            />
-            <el-table-column
-              prop="Priority"
-              label="优先级"
-              align="center"
-              header-align="center"
-              width="80"
-            >
+            <el-table-column prop="EDA" label="EDA" align="center" header-align="center" width="120" />
+            <el-table-column prop="Threads" label="线程数" align="center" header-align="center" width="80" />
+            <el-table-column prop="Priority" label="优先级" align="center" header-align="center" width="80">
               <template #default="scope">
                 <el-tag v-if="scope.row.Priority === 1" type="danger" size="small">高</el-tag>
                 <el-tag v-else-if="scope.row.Priority === 2" type="warning" size="small">中</el-tag>
@@ -313,32 +235,15 @@ onUnmounted(() => {})
                 <el-tag v-else type="default" size="small">{{ scope.row.Priority }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="Format"
-              label="格式"
-              align="center"
-              header-align="center"
-              width="120"
-            />
-            <el-table-column
-              prop="Classify"
-              label="分类"
-              align="center"
-              header-align="center"
-              width="200"
-            >
+            <el-table-column prop="Format" label="格式" align="center" header-align="center" width="120" />
+            <el-table-column prop="Classify" label="分类" align="center" header-align="center" width="200">
               <template #default="scope">
                 <div class="flex items-center justify-between">
                   <span class="truncate flex-1 mr-2" :title="scope.row.Classify">
                     {{ scope.row.Classify || '-' }}
                   </span>
-                  <el-button
-                    v-if="scope.row.Classify"
-                    type="text"
-                    size="small"
-                    class="copy-btn"
-                    @click.stop="copyToClipboard(scope.row.Classify)"
-                  >
+                  <el-button v-if="scope.row.Classify" type="text" size="small" class="copy-btn"
+                    @click.stop="copyToClipboard(scope.row.Classify)">
                     <el-icon>
                       <CopyDocument />
                     </el-icon>
@@ -351,18 +256,10 @@ onUnmounted(() => {})
 
         <!-- 分页组件 - 固定高度24px -->
         <div class="h-6 shrink-0 flex items-center justify-center mt-2 mb-2">
-          <el-pagination
-            v-model:current-page="paginationForm.Page"
-            v-model:page-size="paginationForm.PageSize"
-            :page-sizes="[5, 10, 20, 50]"
-            :small="true"
-            :background="true"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handlePageChange"
-            class="justify-center pagination-compact"
-          />
+          <el-pagination v-model:current-page="paginationForm.Page" v-model:page-size="paginationForm.PageSize"
+            :page-sizes="[5, 10, 20, 50]" :small="true" :background="true"
+            layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+            @current-change="handlePageChange" class="justify-center pagination-compact" />
         </div>
       </div>
     </el-col>
