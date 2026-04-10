@@ -54,7 +54,7 @@ const loadOrders = async () => {
   loading.value = true
   try {
     const response = await api.order.getOrders({ SuitID: props.suit.ID })
-    orders.value = response.List
+    orders.value = response.list
   } catch (err) {
     console.error('加载订单失败:', err)
     ElMessage.error('获取订单数据失败，请检查网络连接')
