@@ -18,6 +18,12 @@ import type { PaginationParams, Process, ProcessSearchParams } from '@/api/types
 import Log from './components/Log.vue'
 import AddFracture from './components/AddFracture.vue'
 
+const props = defineProps<{
+  suitId?: number
+}>()
+
+
+
 // 表格数据
 const tableData = ref<Process[]>([])
 const tableLoading = ref(false)
@@ -29,13 +35,14 @@ const searchForm = ref<Process>({})
 
 const paginationForm = ref<PaginationParams>({
   Page: 1,
-  PageSize: 20,
+  PageSize: 5,
 })
 
 const total = ref(0)
 
-// Log 组件引用
-const logRef = ref<InstanceType<typeof Log>>()
+onMounted(() => {
+  searchForm.value.SuitID = props.suitId
+})
 
 // 当前选中的处理任务
 const selectedProcess = ref<Process>({})
@@ -104,23 +111,6 @@ const handleSizeChange = (size: number) => {
   paginationForm.value.PageSize = size
   paginationForm.value.Page = 1 // 重置到第一页
   listProcesses() // 重新加载数据
-}
-
-const toOrders = (processId: number) => {
-  ElMessage.info(`跳转到处理任务 ${processId} 的子单列表`)
-  // router.push({ path: `/workspace/processes/${processId}/orders` })
-}
-
-const toProcesses = (processId: number, processUID: string) => {
-  // 触发添加处理tab事件
-  console.log(`请求添加处理tab，处理任务ID: ${processId}, 任务编号: ${processUID}`)
-  emit('add-process-tab', processId, processUID)
-}
-
-// 查看日志
-const viewLog = (processId: number) => {
-  if (!logRef.value) return
-  logRef.value.open(processId)
 }
 
 // 打开添加断裂分析对话框
@@ -203,7 +193,7 @@ onUnmounted(() => { })
 </script>
 
 <template>
-  <el-row class="w-full h-full">
+  <el-row class="w-full h-full p-4">
     <el-col :span="24" class="h-full">
       <!-- 表格和分页容器 -->
       <div class="h-full flex flex-col">
@@ -243,6 +233,7 @@ onUnmounted(() => { })
                 <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
               </template>
             </el-table-column>
+            <el-table-column prop="Orders" label="Orders" align="center" header-align="center" width="240" />
             <!-- <el-table-column prop="UID" label="任务编号" align="center" header-align="center" width="280" /> -->
             <el-table-column prop="LinkedAddress" label="关联地址" align="center" header-align="center" width="300">
               <template #default="scope">
@@ -250,7 +241,7 @@ onUnmounted(() => { })
                   <span class="truncate flex-1 mr-2" :title="scope.row.LinkedAddress">
                     {{ scope.row.LinkedAddress || '-' }}
                   </span>
-                  <el-button v-if="scope.row.LinkedAddress" type="text" size="small" class="copy-btn"
+                  <el-button v-if="scope.row.LinkedAddress" type="primary" link size="small" class="copy-btn"
                     @click.stop="copyToClipboard(scope.row.LinkedAddress)">
                     <el-icon>
                       <CopyDocument />
@@ -265,7 +256,7 @@ onUnmounted(() => { })
                   <span class="truncate flex-1 mr-2" :title="scope.row.LocalAddress">
                     {{ scope.row.LocalAddress || '-' }}
                   </span>
-                  <el-button v-if="scope.row.LocalAddress" type="text" size="small" class="copy-btn"
+                  <el-button v-if="scope.row.LocalAddress" type="primary" link size="small" class="copy-btn"
                     @click.stop="copyToClipboard(scope.row.LocalAddress)">
                     <el-icon>
                       <CopyDocument />
@@ -280,8 +271,8 @@ onUnmounted(() => { })
               <template #default="scope">
                 <el-tag v-if="scope.row.Priority === 1" type="danger" size="small">高</el-tag>
                 <el-tag v-else-if="scope.row.Priority === 2" type="warning" size="small">中</el-tag>
-                <el-tag v-else-if="scope.row.Priority === 3" type="info" size="small">低</el-tag>
-                <el-tag v-else type="default" size="small">{{ scope.row.Priority }}</el-tag>
+                <el-tag v-else-if="scope.row.Priority === 3" type="primary" size="small">低</el-tag>
+                <el-tag v-else type="info" size="small">{{ scope.row.Priority }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center" header-align="center" width="250" fixed="right">
@@ -292,6 +283,7 @@ onUnmounted(() => { })
                     :disabled="scope.row.State != 'completed' || scope.row.Status === 'close'">
                     Fracture
                   </el-button>
+                  <!-- <el-button @click="openAddFractureDialog(scope.row)">Fracture</el-button> -->
                   <el-button type="primary" size="small" link @click="" disabled>
                     Density
                   </el-button>
@@ -305,16 +297,13 @@ onUnmounted(() => { })
         <!-- 分页组件 - 固定高度24px -->
         <div class="h-6 shrink-0 flex items-center justify-center mt-2 mb-2">
           <el-pagination v-model:current-page="paginationForm.Page" v-model:page-size="paginationForm.PageSize"
-            :page-sizes="[5, 10, 20, 50]" :small="true" :background="true"
+            :page-sizes="[5, 10, 20, 50]" size="small" :background="true"
             layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
             @current-change="handlePageChange" class="justify-center pagination-compact" />
         </div>
       </div>
     </el-col>
   </el-row>
-
-  <!-- Log 组件 -->
-  <Log ref="logRef" :log-type="'process'" :id="0" />
 
   <!-- AddFracture 组件 -->
   <AddFracture :visible="showAddFractureDialog" :process="selectedProcess" @close="closeAddFractureDialog" />
