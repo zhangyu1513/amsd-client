@@ -14,6 +14,8 @@ import {
   CopyDocument,
 } from '@element-plus/icons-vue'
 import { api } from '@/api'
+import { formatDate } from '@/utils/date'
+import { copyToClipboard } from '@/utils/clipboard'
 import type {
   PaginationParams,
   Process,
@@ -73,7 +75,6 @@ const listSuits = async () => {
     total.value = response.total
   } catch (error) {
     console.error('获取套单数据失败:', error)
-    ElMessage.error('获取数据失败，请检查网络连接')
   } finally {
     tableLoading.value = false
   }
@@ -135,21 +136,6 @@ const processSearchParams = computed<ProcessSearchParams>(() => {
   }
 })
 
-const formatDate = (dateString: string) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date
-    .toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(/\//g, '-')
-}
-
 const listProcesses = async (suitId?: number) => {
   processTableLoading.value = true
   try {
@@ -163,7 +149,6 @@ const listProcesses = async (suitId?: number) => {
     processTotal.value = response.total
   } catch (error) {
     console.error('获取处理任务数据失败:', error)
-    ElMessage.error('获取数据失败，请检查网络连接')
   } finally {
     processTableLoading.value = false
   }
@@ -202,50 +187,6 @@ const openAddDensityDialog = (process: Process) => {
 const closeAddDensityDialog = () => {
   showAddDensityDialog.value = false
   selectedProcess.value = {}
-}
-
-const copyToClipboard = (text: string) => {
-  if (!text) {
-    ElMessage.warning('没有内容可复制')
-    return
-  }
-
-  if (navigator.clipboard) {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        ElMessage.success('已复制到剪贴板')
-      })
-      .catch((err) => {
-        console.error('Clipboard API 复制失败:', err)
-        fallbackCopy(text)
-      })
-  } else {
-    fallbackCopy(text)
-  }
-}
-
-const fallbackCopy = (text: string) => {
-  const textArea = document.createElement('textarea')
-  textArea.style.position = 'absolute'
-  textArea.style.left = '-9999px'
-  textArea.value = text
-  document.body.appendChild(textArea)
-  textArea.select()
-
-  try {
-    const success = document.execCommand('copy')
-    if (success) {
-      ElMessage.success('已复制到剪贴板')
-    } else {
-      ElMessage.error('复制失败，请手动复制')
-    }
-  } catch (err) {
-    console.error('execCommand 复制出错:', err)
-    ElMessage.error('复制失败，请手动复制')
-  } finally {
-    document.body.removeChild(textArea)
-  }
 }
 
 watch(
