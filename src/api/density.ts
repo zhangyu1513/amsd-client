@@ -1,13 +1,15 @@
 // 密度分析API
 import { http } from './index'
-import type { Density } from './types'
+import type { Density, DensitySearchParams, PaginatedResponse } from './types'
 
 /**
  * 获取密度分析列表
  */
-export async function getDensities(params?: { ProcessID?: number }): Promise<Density[]> {
+export async function getDensities(
+  params: DensitySearchParams,
+): Promise<PaginatedResponse<Density>> {
   try {
-    const response = await http.get<Density[]>('/api/v2/densities', { params })
+    const response = await http.get<PaginatedResponse<Density>>('/api/v2/densities', { params })
     return response
   } catch (error) {
     console.error('获取密度分析列表失败:', error)

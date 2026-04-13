@@ -132,13 +132,15 @@ export interface Density {
   UpdatedAt?: Date
   DeletedAt?: Date
 
-  UID: string // 透光率编号，not null
+  UID?: string // 透光率编号，not null
 
   EDA?: string
   Threads?: number
   Priority?: number // 默认值: 4
 
-  Type?: string // process frame
+  Type?: string // PROCESS CUSTOM
+
+  ChipWindow?: string // -100,-100;100,100
 
   LocalAddress?: string // text 类型
 
@@ -148,8 +150,10 @@ export interface Density {
   Error?: string // text 类型
   Log?: string // text 类型
 
-  ProcessID: number // 外键，not null
+  ProcessID?: number // 外键，not null
 }
+
+export interface DensitySearchParams extends PaginationParams, Density {}
 
 // ==========================================
 // 工具与配置类型 (Tooling & Relations)
