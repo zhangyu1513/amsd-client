@@ -12,6 +12,8 @@ import type {
   OrderSearchParams,
   Fracture,
   FractureSearchParams,
+  DensitySearchParams,
+  Density,
 } from './types'
 
 // 使用 env.ts 获取 API 配置
@@ -195,11 +197,11 @@ export const api = {
     },
   },
   density: {
-    getDensities: async (params?: any) => {
+    getDensities: async (params: DensitySearchParams) => {
       const densityModule = await import('./density')
       return densityModule.default.getDensities(params)
     },
-    createDensity: async (params: any) => {
+    createDensity: async (params: Density) => {
       const densityModule = await import('./density')
       return densityModule.default.createDensity(params)
     },

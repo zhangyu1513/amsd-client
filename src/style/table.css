@@ -29,28 +29,28 @@
 }
 
 /* 表格悬停效果 */
-.tech-table :deep(.el-table__row:hover) {
+/* .tech-table :deep(.el-table__row:hover) {
   background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.03) 100%);
   transform: translateX(2px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+} */
 
 /* 表格边框科技感 */
-.tech-table :deep(.el-table) {
+/* .tech-table :deep(.el-table) {
   --el-table-border-color: rgba(59, 130, 246, 0.3);
   --el-table-border: 1px solid var(--el-table-border-color);
-}
+} */
 
-.tech-table :deep(.el-table th) {
+/* .tech-table :deep(.el-table th) {
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
   color: #e2e8f0;
   font-weight: 600;
   border-bottom: 2px solid rgba(59, 130, 246, 0.5);
-}
+} */
 
-.tech-table :deep(.el-table td) {
+/* .tech-table :deep(.el-table td) {
   border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-}
+} */
 
 /* 分页组件样式 */
 .pagination-compact :deep(.el-pagination) {

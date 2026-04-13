@@ -35,7 +35,7 @@ let autoRefreshTimer: ReturnType<typeof setInterval> | null = null
 
 const paginationForm = ref<PaginationParams>({
   Page: 1,
-  PageSize: 5,
+  PageSize: 20,
 })
 const total = ref(0)
 
@@ -94,17 +94,6 @@ const stopAutoRefresh = () => {
     autoRefreshTimer = null
   }
   autoRefresh.value = false
-}
-
-const handlePageChange = (page: number) => {
-  paginationForm.value.Page = page
-  listFractures()
-}
-
-const handleSizeChange = (size: number) => {
-  paginationForm.value.PageSize = size
-  paginationForm.value.Page = 1
-  listFractures()
 }
 
 const copyToClipboard = (text: string) => {
@@ -254,7 +243,7 @@ const handleSubmit = async () => {
 
       <div class="flex-1 min-h-0">
         <el-table :data="tableData" border show-overflow-tooltip v-loading="tableLoading" size="small"
-          class="w-full tech-table" :data-version="dataVersion" max-height="300">
+          class="w-full tech-table" :data-version="dataVersion" height="300">
           <el-table-column type="index" label="#" align="center" header-align="center" width="50" />
           <el-table-column prop="CreatedAt" label="创建时间" align="center" header-align="center" width="160">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
@@ -294,12 +283,6 @@ const handleSubmit = async () => {
           <el-table-column prop="EDA" label="EDA" align="center" header-align="center" width="100" />
           <el-table-column prop="Threads" label="线程数" align="center" header-align="center" width="80" />
         </el-table>
-        <div class="flex items-center justify-center mt-2">
-          <el-pagination v-model:current-page="paginationForm.Page" v-model:page-size="paginationForm.PageSize"
-            :page-sizes="[5, 10, 20, 50]" :small="true" :background="true"
-            layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
-            @current-change="handlePageChange" />
-        </div>
       </div>
     </div>
   </el-dialog>

@@ -229,7 +229,7 @@ watch(() => props.visible, (newVal) => {
           </div>
 
           <el-table v-if="!loading && orders.length > 0" :data="orders" border size="small" class="w-full"
-            max-height="400" @selection-change="handleSelectionChange" :row-key="(row: Order) => row.Number || ''">
+            max-height="250px" @selection-change="handleSelectionChange" :row-key="(row: Order) => row.Number || ''">
             <el-table-column type="selection" :selectable="selectable" align="center" width="40" />
             <el-table-column prop="Number" label="订单编号" align="center" />
             <el-table-column prop="ModelNumber" label="ModelNumber" align="center" width="160">
