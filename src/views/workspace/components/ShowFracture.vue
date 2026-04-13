@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, reactive, watch, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElLoading } from 'element-plus'
-import type { FormInstance, FormRules } from 'element-plus'
 import type { Process, Fracture, FractureSearchParams, PaginationParams } from '@/api/types'
 import { api } from '@/api'
 import { CopyDocument } from '@element-plus/icons-vue'
+import { formatDate } from '@/utils/date'
+import { copyToClipboard } from '@/utils/clipboard'
 
 interface Props {
   visible: boolean
@@ -12,65 +13,43 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits<{
+  close: []
+}>()
+
+const dialogVisible = ref(false)
+const loading = ref(false)
+const tableLoading = ref(false)
+const tableData = ref<Fracture[]>([])
+const total = ref(0)
+const lastFetchTime = ref('')
+const autoRefresh = ref(false)
+let autoRefreshTimer: ReturnType<typeof setInterval> | null = null
+const dataVersion = ref(0)
 
 const fracture = reactive<Fracture>({
   Format: 'OASIS',
   Type: 'total',
 })
-const loading = ref(false)
 
-const emit = defineEmits(['close'])
-
-const formRef = ref<FormInstance>()
-
-const dialogVisible = ref(false)
-
-const tableData = ref<Fracture[]>([])
-const tableLoading = ref(false)
-const dataVersion = ref(0)
-
-const lastFetchTime = ref('')
-const autoRefresh = ref(false)
-let autoRefreshTimer: ReturnType<typeof setInterval> | null = null
-
-const paginationForm = ref<PaginationParams>({
+const searchForm = reactive<FractureSearchParams & PaginationParams>({
   Page: 1,
-  PageSize: 20,
-})
-const total = ref(0)
-
-const searchForm = computed<FractureSearchParams>(() => ({
-  ...paginationForm.value,
+  PageSize: 10,
   ProcessID: props.process.ID,
-}))
-
-const formatDate = (dateString: string) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date
-    .toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(/\//g, '-')
-}
+})
 
 const listFractures = async () => {
   if (!props.process.ID) return
   tableLoading.value = true
   try {
-    const response = await api.fracture.getFractures(searchForm.value)
+    const response = await api.fracture.getFractures(searchForm)
     tableData.value = []
     await nextTick()
     tableData.value = response.list
     total.value = response.total
     lastFetchTime.value = new Date().toLocaleTimeString()
   } catch (error) {
-    console.error('获取断裂分析数据失败:', error)
+    console.error('获取转档分析数据失败:', error)
   } finally {
     tableLoading.value = false
   }
@@ -94,39 +73,6 @@ const stopAutoRefresh = () => {
     autoRefreshTimer = null
   }
   autoRefresh.value = false
-}
-
-const copyToClipboard = (text: string) => {
-  if (!text) {
-    ElMessage.warning('没有内容可复制')
-    return
-  }
-  if (navigator.clipboard) {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        ElMessage.success('已复制到剪贴板')
-      })
-      .catch(() => fallbackCopy(text))
-  } else {
-    fallbackCopy(text)
-  }
-}
-
-const fallbackCopy = (text: string) => {
-  const textArea = document.createElement('textarea')
-  textArea.style.position = 'absolute'
-  textArea.style.left = '-9999px'
-  textArea.value = text
-  document.body.appendChild(textArea)
-  textArea.select()
-  try {
-    document.execCommand('copy') ? ElMessage.success('已复制到剪贴板') : ElMessage.error('复制失败')
-  } catch {
-    ElMessage.error('复制失败')
-  } finally {
-    document.body.removeChild(textArea)
-  }
 }
 
 watch(
@@ -177,11 +123,7 @@ const resetForm = () => {
 }
 
 const handleSubmit = async () => {
-  if (!formRef.value) return
   try {
-    const valid = await formRef.value.validate()
-    if (!valid) return
-
     const submitData: Fracture = {
       ...fracture,
       ProcessID: props.process.ID,
@@ -201,7 +143,6 @@ const handleSubmit = async () => {
       ElMessage.success('添加转档任务成功')
     } catch (error) {
       console.error('创建转档任务失败:', error)
-      ElMessage.error(error instanceof Error ? error.message : '创建失败')
     } finally {
       loadingInstance.close()
       loading.value = false
@@ -213,7 +154,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <el-dialog v-model="dialogVisible" title="转档任务" width="80%" :z-index="99999" :close-on-click-modal="false"
+  <el-dialog v-model="dialogVisible" title="转档任务" width="80%" :close-on-click-modal="false"
     :close-on-press-escape="false" draggable @close="handleClose">
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">

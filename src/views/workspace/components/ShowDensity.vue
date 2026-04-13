@@ -4,6 +4,8 @@ import { ElMessage, ElLoading } from 'element-plus'
 import type { Process, Density, DensitySearchParams, PaginationParams } from '@/api/types'
 import { api } from '@/api'
 import { CopyDocument } from '@element-plus/icons-vue'
+import { formatDate } from '@/utils/date'
+import { copyToClipboard } from '@/utils/clipboard'
 
 interface Props {
   visible: boolean
@@ -42,21 +44,6 @@ const searchParams = computed<DensitySearchParams>(() => ({
   ProcessID: props.process.ID,
 }))
 
-const formatDate = (dateString: string) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date
-    .toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    })
-    .replace(/\//g, '-')
-}
-
 const listDensities = async () => {
   if (!props.process.ID) return
   tableLoading.value = true
@@ -71,39 +58,6 @@ const listDensities = async () => {
     console.error('获取密度分析数据失败:', error)
   } finally {
     tableLoading.value = false
-  }
-}
-
-const copyToClipboard = (text: string) => {
-  if (!text) {
-    ElMessage.warning('没有内容可复制')
-    return
-  }
-  if (navigator.clipboard) {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        ElMessage.success('已复制到剪贴板')
-      })
-      .catch(() => fallbackCopy(text))
-  } else {
-    fallbackCopy(text)
-  }
-}
-
-const fallbackCopy = (text: string) => {
-  const textArea = document.createElement('textarea')
-  textArea.style.position = 'absolute'
-  textArea.style.left = '-9999px'
-  textArea.value = text
-  document.body.appendChild(textArea)
-  textArea.select()
-  try {
-    document.execCommand('copy') ? ElMessage.success('已复制到剪贴板') : ElMessage.error('复制失败')
-  } catch {
-    ElMessage.error('复制失败')
-  } finally {
-    document.body.removeChild(textArea)
   }
 }
 
@@ -169,11 +123,6 @@ const handleSubmit = async () => {
     return
   }
 
-  if (density.Type === 'CUSTOM' && !density.ChipWindow) {
-    ElMessage.warning('选择CUSTOM时，坐标必填')
-    return
-  }
-
   const submitData: Density = {
     ...density,
     ProcessID: props.process.ID,
@@ -192,7 +141,6 @@ const handleSubmit = async () => {
     ElMessage.success('添加密度分析任务成功')
   } catch (error) {
     console.error('创建密度分析任务失败:', error)
-    ElMessage.error(error instanceof Error ? error.message : '创建失败')
   } finally {
     loadingInstance.close()
     loading.value = false
@@ -201,7 +149,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <el-dialog v-model="dialogVisible" title="密度分析" width="80%" :z-index="99999" :close-on-click-modal="false"
+  <el-dialog v-model="dialogVisible" title="密度分析" width="80%" :close-on-click-modal="false"
     :close-on-press-escape="false" draggable @close="handleClose">
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-4">
@@ -213,7 +161,7 @@ const handleSubmit = async () => {
             </el-radio-group>
           </el-form-item>
           <el-form-item label="ChipWindow" v-if="density.Type === 'CUSTOM'">
-            <el-input v-model="density.ChipWindow" placeholder="-100,-100;100,100" style="width: 200px" />
+            <el-input v-model="density.ChipWindow" placeholder="example: -100 -100 100 100" style="width: 200px" />
           </el-form-item>
         </el-form>
         <div class="flex items-center gap-2 ml-auto">
