@@ -1,8 +1,8 @@
 // API 统一入口
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { ElMessage } from 'element-plus'
 import { getApiConfig } from '@/utils/env'
+import { ElMessage } from 'element-plus'
 import type {
   Suit,
   SuitSearchParams,
@@ -60,36 +60,43 @@ service.interceptors.response.use(
     if (data.code === 200 || data.success) {
       return data.data || data
     } else {
-      ElMessage.error(data.message || '请求失败')
+      console.error(data.message || '请求失败')
       return Promise.reject(new Error(data.message || '请求失败'))
     }
   },
   (error: any) => {
     console.error('响应错误:', error)
 
+    var err_info = ''
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          ElMessage.error('未授权，请重新登录')
+          err_info = '未授权，请重新登录'
           // 跳转到登录页
           break
         case 403:
-          ElMessage.error('拒绝访问')
+          err_info = '拒绝访问'
           break
         case 404:
-          ElMessage.error('请求的资源不存在')
+          err_info = '请求的资源不存在'
           break
         case 500:
-          ElMessage.error('服务器内部错误')
+          err_info = '服务器内部错误'
           break
         default:
-          ElMessage.error(error.response.data?.message || '请求失败')
+          err_info = error.response.data?.message || '请求失败'
       }
     } else if (error.request) {
-      ElMessage.error('网络错误，请检查网络连接')
+      err_info = '网络错误，请检查网络连接'
     } else {
-      ElMessage.error('请求配置错误')
+      err_info = '请求配置错误'
     }
+    ElMessage({
+      showClose: true,
+      message: err_info,
+      duration: 0,
+      type: 'error',
+    })
 
     return Promise.reject(error)
   },

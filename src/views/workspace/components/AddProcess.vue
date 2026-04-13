@@ -34,20 +34,8 @@ const selectable = (row: Order, index: number) => {
   return row.Status === 'open' || !row.Status
 }
 
-// 订单选择验证规则
-const validateOrders = (rule: any, value: any, callback: any) => {
-  if (!checkedOrders.value || checkedOrders.value.length === 0) {
-    callback(new Error('请至少选择一个订单'))
-  } else {
-    callback()
-  }
-}
-
 // 定义组件Emits
 const emit = defineEmits(["close"])
-
-// 表单引用
-const formRef = ref<FormInstance>()
 
 // 加载订单
 const loadOrders = async () => {
@@ -63,74 +51,6 @@ const loadOrders = async () => {
   }
 }
 
-// Linux文件路径校验规则
-const validateLinuxPath = (rule: any, value: string, callback: any) => {
-  // 如果值为空或undefined，由required规则处理
-  if (!value || value.trim() === '') {
-    callback()
-    return
-  }
-
-  const trimmedValue = value.trim()
-
-  // 检查是否以空格开头或结尾
-  if (value !== trimmedValue) {
-    callback(new Error('路径不能以空格开头或结尾'))
-    return
-  }
-
-  // 检查非法字符
-  const illegalChars = /[<>:"|?*]/
-  if (illegalChars.test(trimmedValue)) {
-    callback(new Error('路径包含非法字符：<>:"|?*'))
-    return
-  }
-
-  // 检查连续斜杠（除了网络路径开头的//）
-  if (trimmedValue.startsWith('//')) {
-    // 网络路径允许开头的//，但检查后面的部分
-    const afterNetworkPath = trimmedValue.substring(2)
-    if (afterNetworkPath.includes('//')) {
-      callback(new Error('路径不能包含连续斜杠'))
-      return
-    }
-  } else if (trimmedValue.includes('//')) {
-    callback(new Error('路径不能包含连续斜杠'))
-    return
-  }
-
-  // 检查路径格式
-  // 允许的格式：
-  // 1. 绝对路径：/path/to/file
-  // 2. 相对路径：./path/to/file 或 ../path/to/file
-  // 3. 用户家目录：~/path/to/file
-  // 4. 网络路径：//server/path
-  const pathPattern = /^(\/|\.\/|\.\.\/|~\/|\/\/)/
-  if (!pathPattern.test(trimmedValue)) {
-    callback(new Error('请输入有效的Linux文件路径（以/, ./, ../, ~/或//开头）'))
-    return
-  }
-
-  // 检查路径长度
-  if (trimmedValue.length > 4096) {
-    callback(new Error('路径过长，Linux系统最大路径长度为4096字符'))
-    return
-  }
-
-  callback()
-}
-
-// 表单验证规则
-const rules = reactive<FormRules>({
-  Orders: [
-    { validator: validateOrders, trigger: 'change' }
-  ],
-  LinkedAddress: [
-    { required: true, message: '请输入关联地址', trigger: 'blur' },
-    { validator: validateLinuxPath, trigger: 'blur' }
-  ]
-})
-
 // 关闭Dialog
 const handleClose = () => {
   resetForm()
@@ -141,18 +61,14 @@ const handleClose = () => {
 const resetForm = () => {
   process.LinkedAddress = ""
   checkedOrders.value = []
-  formRef.value?.clearValidate()
 }
 
 // 提交表单
 const handleSubmit = async () => {
-  if (!formRef.value) return
 
   try {
-    // 验证表单
-    const valid = await formRef.value.validate()
-    if (!valid) return
-
+    // 去除空格
+    process.LinkedAddress = process.LinkedAddress?.trim()
     // 准备提交数据
     const submitData: Process = {
       ...process,
@@ -168,8 +84,6 @@ const handleSubmit = async () => {
       text: '正在创建处理任务...',
       background: 'rgba(0, 0, 0, 0.7)'
     })
-    console.log(submitData)
-    // return
 
     try {
       await api.process.createProcess(submitData)
@@ -180,8 +94,7 @@ const handleSubmit = async () => {
       // 显示成功消息
       ElMessage.success('添加处理任务成功')
     } catch (error) {
-      console.error('创建处理任务失败:', error)
-      ElMessage.error(error!)
+      console.error(error)
     } finally {
       loadingInstance.close()
       loading.value = false
@@ -210,7 +123,7 @@ watch(() => props.visible, (newVal) => {
   <el-dialog v-model="dialogVisible" title="添加处理任务" width="600px" :close-on-click-modal="false"
     :close-on-press-escape="false" :show-close="false" draggable @close="handleClose">
     <!-- 表单内容 -->
-    <el-form ref="formRef" :model="process" :rules="rules" size="small" label-width="100px" label-position="top"
+    <el-form ref="formRef" :model="process" size="small" label-width="100px" label-position="top"
       class="w-full pl-2 pr-2">
       <el-form-item label="选择订单" prop="Orders" class="w-full">
         <div class="order-table-container" :class="{ 'loading': loading }">
@@ -221,15 +134,15 @@ watch(() => props.visible, (newVal) => {
             <span>加载订单中...</span>
           </div>
 
-          <div v-if="!loading && orders.length === 0" class="empty-state">
+          <div v-if="orders.length === 0" class="empty-state">
             <el-icon>
               <Document />
             </el-icon>
             <p>暂无订单数据</p>
           </div>
 
-          <el-table v-if="!loading && orders.length > 0" :data="orders" border size="small" class="w-full"
-            max-height="250px" @selection-change="handleSelectionChange" :row-key="(row: Order) => row.Number || ''">
+          <el-table v-if="orders.length > 0" :data="orders" border size="small" class="w-full" max-height="250px"
+            @selection-change="handleSelectionChange" :row-key="(row: Order) => row.Number || ''">
             <el-table-column type="selection" :selectable="selectable" align="center" width="40" />
             <el-table-column prop="Number" label="订单编号" align="center" />
             <el-table-column prop="ModelNumber" label="ModelNumber" align="center" width="160">
@@ -260,22 +173,12 @@ watch(() => props.visible, (newVal) => {
       </el-form-item>
     </el-form>
 
-    <!-- <div class="form-tips">
-      <p class="tip-text">Linux文件夹路径格式要求：</p>
-      <ul class="tip-list">
-        <li>• 必须以 /, ./, ../, ~/ 或 // 开头</li>
-        <li>• 不能包含非法字符：<> : " | ? *</li>
-        <li>• 不能以空格开头或结尾</li>
-        <li>• 不能包含连续斜杠（//）</li>
-        <li>• 最大长度：4096字符</li>
-      </ul>
-    </div> -->
-
     <!-- 底部按钮 -->
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleClose" :disabled="loading">关闭</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="loading" :disabled="checkedOrders.length === 0">
+        <el-button type="primary" @click="handleSubmit" :loading="loading"
+          :disabled="checkedOrders.length === 0 || process.LinkedAddress?.trim() === ''">
           提交
         </el-button>
       </div>
