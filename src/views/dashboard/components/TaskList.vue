@@ -91,7 +91,13 @@ onUnmounted(() => {
           <span class="font-medium">运行中的任务</span>
           <el-tag type="warning" size="small" effect="dark">{{ tasks.length }}</el-tag>
         </div>
-        <el-button :icon="RefreshRight" circle size="small" @click="handleRefresh" :loading="loading" />
+        <el-button
+          :icon="RefreshRight"
+          circle
+          size="small"
+          @click="handleRefresh"
+          :loading="loading"
+        />
       </div>
     </template>
 
@@ -104,17 +110,22 @@ onUnmounted(() => {
     <el-empty v-else-if="tasks.length === 0" description="暂无运行中的任务" />
 
     <div v-else class="space-y-2 max-h-100 overflow-y-auto pr-1">
-      <div v-for="(task, index) in tasks" :key="index"
-        class="group flex items-center gap-3 p-3 bg-[#1d1d1d] rounded-lg border border-gray-700 hover:border-blue-600 transition-all cursor-pointer">
+      <div
+        v-for="(task, index) in tasks"
+        :key="index"
+        class="group flex items-center gap-3 p-3 bg-[#1d1d1d] rounded-lg border border-gray-700 hover:border-blue-600 transition-all cursor-pointer"
+      >
         <div :class="['w-1 h-12 rounded-full', getTaskTypeColor(task.Type)]"></div>
 
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-1">
-            <span :class="[
-              'text-sm font-medium px-2 py-0.5 rounded',
-              getTaskTypeTextColor(task.Type) + '/10',
-              getTaskTypeTextColor(task.Type),
-            ]">
+            <span
+              :class="[
+                'text-sm font-medium px-2 py-0.5 rounded',
+                getTaskTypeTextColor(task.Type) + '/10',
+                getTaskTypeTextColor(task.Type),
+              ]"
+            >
               {{ task.Type || 'Unknown' }}
             </span>
           </div>

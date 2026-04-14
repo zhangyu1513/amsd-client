@@ -43,7 +43,9 @@ onMounted(() => {
 
     <el-row :gutter="20">
       <el-col :span="12">
-        <div class="p-4 bg-linear-to-br from-orange-500 via-amber-500 to-yellow-500 rounded-xl text-white shadow-lg">
+        <div
+          class="p-4 bg-linear-to-br from-orange-500 via-amber-500 to-yellow-500 rounded-xl text-white shadow-lg"
+        >
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
               <el-icon class="text-lg">
@@ -79,8 +81,15 @@ onMounted(() => {
             </div>
           </div>
 
-          <el-progress :percentage="Math.round((suitStats.executed / (suitStats.executed + suitStats.pending || 1)) * 100)
-            " :stroke-width="4" :show-text="false" color="#fff" class="mt-3" />
+          <el-progress
+            :percentage="
+              Math.round((suitStats.executed / (suitStats.executed + suitStats.pending || 1)) * 100)
+            "
+            :stroke-width="4"
+            :show-text="false"
+            color="#fff"
+            class="mt-3"
+          />
           <div class="flex justify-end text-xs mt-1 opacity-60">
             {{
               Math.round(
@@ -92,7 +101,9 @@ onMounted(() => {
       </el-col>
 
       <el-col :span="12">
-        <div class="p-4 bg-linear-to-br from-violet-500 via-purple-500 to-pink-500 rounded-xl text-white shadow-lg">
+        <div
+          class="p-4 bg-linear-to-br from-violet-500 via-purple-500 to-pink-500 rounded-xl text-white shadow-lg"
+        >
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
               <el-icon class="text-lg">
@@ -128,10 +139,17 @@ onMounted(() => {
             </div>
           </div>
 
-          <el-progress :percentage="Math.round(
-            (orderStats.executed / (orderStats.executed + orderStats.pending || 1)) * 100,
-          )
-            " :stroke-width="4" :show-text="false" color="#fff" class="mt-3" />
+          <el-progress
+            :percentage="
+              Math.round(
+                (orderStats.executed / (orderStats.executed + orderStats.pending || 1)) * 100,
+              )
+            "
+            :stroke-width="4"
+            :show-text="false"
+            color="#fff"
+            class="mt-3"
+          />
           <div class="flex justify-end text-xs mt-1 opacity-60">
             {{
               Math.round(
