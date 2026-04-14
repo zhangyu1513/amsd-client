@@ -17,7 +17,7 @@ import TaskList from './components/TaskList.vue'
       </el-col>
       <el-col :xs="24" :md="12">
         <div class="flex flex-col gap-4 h-full">
-          <NodeList class="h-2/5" />
+          <NodeList class="h-3/5" />
           <TaskList class="flex-1" />
         </div>
       </el-col>

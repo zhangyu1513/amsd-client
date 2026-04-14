@@ -54,12 +54,12 @@ const getUsageStatus = (percent: number) => {
       </el-icon>
     </div>
     <div v-else-if="data?.length" class="space-y-3">
-      <div v-for="node in data" :key="node.ID" class="p-3 rounded-lg bg-gray-50 dark:bg-[#1d1d1d]">
+      <div v-for="node in data" :key="node.ID" class="p-3 rounded-lg dark:bg-[#1d1d1d]">
         <div class="flex items-center gap-2">
           <!-- 左侧：图标+名称+主机 -->
           <div class="flex items-center gap-2 w-40 shrink-0">
             <div
-              class="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">
+              class="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg dark:bg-blue-900 text-blue-600 dark:text-blue-300">
               <el-icon size="16">
                 <Monitor />
               </el-icon>
@@ -92,7 +92,7 @@ const getUsageStatus = (percent: number) => {
             </div>
             <div class="w-10 text-center">
               <el-progress type="circle" :percentage="getUsagePercent(node.Loaded, node.Threads)"
-                :status="getUsageStatus(getUsagePercent(node.Loaded, node.Threads))" :width="32" :stroke-width="3" />
+                :status="getUsageStatus(getUsagePercent(node.Loaded, node.Threads))" :width="32" :stroke-width="4" />
             </div>
           </div>
         </div>
