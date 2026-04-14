@@ -13,10 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <main
-    :class="['overflow-auto min-w-0', props.padding, props.background, props.class]"
-    class="w-full h-full"
-  >
+  <main :class="['overflow-auto min-w-0', props.padding, props.background, props.class]" class="w-full h-full">
     <slot>
       <!-- 默认插槽，用于放置路由视图或其他内容 -->
       <router-view />

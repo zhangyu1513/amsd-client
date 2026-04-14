@@ -2,7 +2,15 @@
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import { getMenuItems, type MenuItem } from '@/utils/route'
-import { Odometer, Briefcase, Document, Tickets, MessageBox } from '@element-plus/icons-vue'
+import {
+  Odometer,
+  Briefcase,
+  Document,
+  Tickets,
+  MessageBox,
+  Tools,
+  EditPen,
+} from '@element-plus/icons-vue'
 
 interface Props {
   isCollapse?: boolean
@@ -34,6 +42,8 @@ const iconMap: Record<string, any> = {
   Document,
   Tickets,
   MessageBox,
+  Tools,
+  EditPen,
 }
 
 // 获取图标组件
