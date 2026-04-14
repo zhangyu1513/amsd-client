@@ -13,7 +13,7 @@ interface LoginForm {
 
 const form = reactive<LoginForm>({
   username: 'auto',
-  password: '123456'
+  password: '123456',
 })
 
 const loading = ref(false)
@@ -38,14 +38,19 @@ const initThreeScene = () => {
   scene.background = new THREE.Color(0x0a0a1a)
 
   // 创建相机
-  camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000)
+  camera = new THREE.PerspectiveCamera(
+    60,
+    container.clientWidth / container.clientHeight,
+    0.1,
+    1000,
+  )
   camera.position.set(0, 0, 25)
 
   // 创建渲染器
   renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true,
-    powerPreference: 'high-performance'
+    powerPreference: 'high-performance',
   })
   renderer.setSize(container.clientWidth, container.clientHeight)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -95,7 +100,7 @@ const createChipModel = () => {
     clearcoat: 1,
     clearcoatRoughness: 0,
     emissive: 0x0a0a1a,
-    emissiveIntensity: 0.2
+    emissiveIntensity: 0.2,
   })
   const base = new THREE.Mesh(baseGeometry, baseMaterial)
   base.castShadow = true
@@ -111,7 +116,7 @@ const createChipModel = () => {
     emissive: 0x00a8ff,
     emissiveIntensity: 0.3,
     transparent: true,
-    opacity: 0.9
+    opacity: 0.9,
   })
   const core = new THREE.Mesh(coreGeometry, coreMaterial)
   core.position.z = 0.8
@@ -126,7 +131,7 @@ const createChipModel = () => {
     metalness: 0.9,
     roughness: 0.1,
     emissive: 0x8a2be2,
-    emissiveIntensity: 0.2
+    emissiveIntensity: 0.2,
   })
 
   for (let i = 0; i < pinCount; i++) {
@@ -171,7 +176,7 @@ const createChipModel = () => {
     vertexColors: true,
     transparent: true,
     opacity: 0.8,
-    blending: THREE.AdditiveBlending
+    blending: THREE.AdditiveBlending,
   })
 
   const particles = new THREE.Points(particleGeometry, particleMaterial)
@@ -227,7 +232,7 @@ const handleLogin = async () => {
     // 使用用户store进行登录
     const success = await userStore.login({
       username: form.username,
-      password: form.password
+      password: form.password,
     })
 
     if (success) {
@@ -297,18 +302,36 @@ onUnmounted(() => {
         <!-- 登录表单 -->
         <el-form :model="form" class="login-form" @submit.prevent="handleLogin">
           <el-form-item>
-            <el-input v-model="form.username" placeholder="USERNAME" size="large" :prefix-icon="User"
-              class="login-input tech-input" />
+            <el-input
+              v-model="form.username"
+              placeholder="USERNAME"
+              size="large"
+              :prefix-icon="User"
+              class="login-input tech-input"
+            />
           </el-form-item>
 
           <el-form-item>
-            <el-input v-model="form.password" type="password" placeholder="PASSWORD" size="large" :prefix-icon="Lock"
-              show-password class="login-input tech-input" @keyup.enter="handleLogin" />
+            <el-input
+              v-model="form.password"
+              type="password"
+              placeholder="PASSWORD"
+              size="large"
+              :prefix-icon="Lock"
+              show-password
+              class="login-input tech-input"
+              @keyup.enter="handleLogin"
+            />
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" size="large" :loading="loading" @click="handleLogin"
-              class="login-button tech-button">
+            <el-button
+              type="primary"
+              size="large"
+              :loading="loading"
+              @click="handleLogin"
+              class="login-button tech-button"
+            >
               <span class="button-text">{{ loading ? '验证中...' : '系统接入' }}</span>
               <span class="button-glow"></span>
             </el-button>
@@ -424,7 +447,6 @@ onUnmounted(() => {
 }
 
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 0.3;
@@ -472,11 +494,15 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   border-radius: 16px;
-  background: linear-gradient(135deg,
-      rgba(0, 168, 255, 0.3) 0%,
-      rgba(138, 43, 226, 0.3) 50%,
-      rgba(0, 255, 255, 0.3) 100%);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 168, 255, 0.3) 0%,
+    rgba(138, 43, 226, 0.3) 50%,
+    rgba(0, 255, 255, 0.3) 100%
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   mask-composite: exclude;
   padding: 1px;
   pointer-events: none;
@@ -646,10 +672,12 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg,
-      rgba(0, 168, 255, 0.8) 0%,
-      rgba(138, 43, 226, 0.8) 50%,
-      rgba(0, 255, 255, 0.8) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 168, 255, 0.8) 0%,
+    rgba(138, 43, 226, 0.8) 50%,
+    rgba(0, 255, 255, 0.8) 100%
+  );
   filter: blur(10px);
   opacity: 0;
   transition: opacity 0.3s ease;

@@ -34,6 +34,7 @@ import { login, logout } from '@/api/auth'
 ### 2. 基本使用示例
 
 #### 用户认证
+
 ```typescript
 import { login, logout, getUserInfo } from '@/api/auth'
 
@@ -42,7 +43,7 @@ async function handleLogin() {
   try {
     const response = await login({
       username: 'admin',
-      password: 'admin123'
+      password: 'admin123',
     })
     console.log('登录成功:', response)
   } catch (error) {
@@ -62,6 +63,7 @@ async function loadUserInfo() {
 ```
 
 #### 套单管理
+
 ```typescript
 import { getSuits, getSuit, createSuit, updateSuit, deleteSuit } from '@/api/suit'
 
@@ -72,7 +74,7 @@ async function loadSuits() {
       page: 1,
       pageSize: 10,
       sortBy: 'createdAt',
-      sortOrder: 'desc'
+      sortOrder: 'desc',
     })
     console.log('套单列表:', response)
   } catch (error) {
@@ -87,7 +89,7 @@ async function createNewSuit() {
       number: 'SUIT-001',
       customerCode: 'CUST-001',
       customerName: '测试客户',
-      saler: '张三'
+      saler: '张三',
     })
     console.log('创建成功:', suit)
   } catch (error) {
@@ -97,6 +99,7 @@ async function createNewSuit() {
 ```
 
 #### 子单管理
+
 ```typescript
 import { getOrders, getOrdersBySuit } from '@/api/order'
 
@@ -105,7 +108,7 @@ async function loadAllOrders() {
   try {
     const response = await getOrders({
       page: 1,
-      pageSize: 20
+      pageSize: 20,
     })
     console.log('子单列表:', response)
   } catch (error) {
@@ -118,7 +121,7 @@ async function loadSuitOrders(suitId: number) {
   try {
     const response = await getOrdersBySuit(suitId, {
       page: 1,
-      pageSize: 10
+      pageSize: 10,
     })
     console.log('套单子单:', response)
   } catch (error) {
@@ -128,6 +131,7 @@ async function loadSuitOrders(suitId: number) {
 ```
 
 #### 处理任务
+
 ```typescript
 import { getProcesses, createProcess } from '@/api/process'
 
@@ -137,7 +141,7 @@ async function loadProcesses() {
     const response = await getProcesses({
       suitId: 1,
       page: 1,
-      pageSize: 10
+      pageSize: 10,
     })
     console.log('处理任务列表:', response)
   } catch (error) {
@@ -147,6 +151,7 @@ async function loadProcesses() {
 ```
 
 #### 仪表盘数据
+
 ```typescript
 import { getDashboardStats, getTaskTrendData } from '@/api/dashboard'
 
@@ -155,7 +160,7 @@ async function loadDashboardData() {
   try {
     const stats = await getDashboardStats()
     const trendData = await getTaskTrendData({ days: 7 })
-    
+
     console.log('统计数据:', stats)
     console.log('趋势数据:', trendData)
   } catch (error) {
@@ -167,6 +172,7 @@ async function loadDashboardData() {
 ## API 分类说明
 
 ### 1. 用户认证 (auth.ts)
+
 - `login()` - 用户登录
 - `logout()` - 用户退出
 - `getUserInfo()` - 获取用户信息
@@ -175,6 +181,7 @@ async function loadDashboardData() {
 - `register()` - 用户注册
 
 ### 2. 套单管理 (suit.ts)
+
 - `getSuits()` - 获取套单列表（分页）
 - `getSuit()` - 获取单个套单详情
 - `createSuit()` - 创建套单
@@ -183,6 +190,7 @@ async function loadDashboardData() {
 - `getSuitStats()` - 获取套单统计信息
 
 ### 3. 子单管理 (order.ts)
+
 - `getOrders()` - 获取子单列表（分页）
 - `getOrder()` - 获取单个子单详情
 - `createOrder()` - 创建子单
@@ -192,6 +200,7 @@ async function loadDashboardData() {
 - `getOrderStats()` - 获取子单统计信息
 
 ### 4. 处理任务 (process.ts)
+
 - `getProcesses()` - 获取处理任务列表
 - `createProcess()` - 创建处理任务
 - `updateProcess()` - 更新处理任务
@@ -201,6 +210,7 @@ async function loadDashboardData() {
 - `getProcessStats()` - 获取处理任务统计信息
 
 ### 5. 断裂分析 (fracture.ts)
+
 - `getFractures()` - 获取断裂分析列表
 - `createFracture()` - 创建断裂分析
 - `updateFracture()` - 更新断裂分析
@@ -210,6 +220,7 @@ async function loadDashboardData() {
 - `getFractureStats()` - 获取断裂分析统计信息
 
 ### 6. 密度分析 (density.ts)
+
 - `getDensities()` - 获取密度分析列表
 - `createDensity()` - 创建密度分析
 - `updateDensity()` - 更新密度分析
@@ -220,6 +231,7 @@ async function loadDashboardData() {
 - `getDensityChartData()` - 获取密度分析图表数据
 
 ### 7. 日志管理 (log.ts)
+
 - `getSystemLogs()` - 获取系统日志
 - `getProcessLogs()` - 获取处理任务日志
 - `getFractureLogs()` - 获取断裂分析日志
@@ -230,6 +242,7 @@ async function loadDashboardData() {
 - `getLogStats()` - 获取日志统计信息
 
 ### 8. 仪表盘 (dashboard.ts)
+
 - `getDashboardStats()` - 获取仪表盘统计数据
 - `getTaskTrendData()` - 获取任务趋势数据
 - `getTaskDistributionData()` - 获取任务分布数据
@@ -270,6 +283,7 @@ async function getSuits(params?: PaginationParams): Promise<PaginatedResponse<Su
 ## Mock 数据
 
 开发环境下使用mock数据，所有接口都已配置mock响应，支持：
+
 - 分页数据
 - 随机生成的数据
 - 错误状态模拟
@@ -294,6 +308,7 @@ VITE_API_BASE_URL=http://localhost:3000/api
 ## 更新日志
 
 ### v1.0.0 (2024-03-31)
+
 - 基于后端 `/api/v2` 接口开发
 - 完整的API模块分类
 - TypeScript类型定义
