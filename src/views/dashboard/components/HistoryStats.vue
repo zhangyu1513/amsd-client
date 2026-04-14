@@ -109,19 +109,18 @@ onMounted(() => {
     <div class="space-y-6">
       <el-row :gutter="24">
         <el-col :span="12">
-          <div
-            class="p-4 bg-linear-to-br from-blue-900/20 to-cyan-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+          <div class="p-4 bg-linear-to-br from-blue-900/20 to-cyan-900/20 rounded-xl border border-blue-800">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-2">
                 <el-icon class="text-blue-500 text-xl">
                   <FolderOpened />
                 </el-icon>
-                <span class="text-blue-700 dark:text-blue-300 font-medium">套单</span>
+                <span class="text-blue-300 font-medium">套单</span>
               </div>
               <el-tag type="warning" size="small" effect="dark">请关注</el-tag>
             </div>
             <div class="flex items-end gap-4">
-              <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              <div class="text-3xl font-bold text-blue-400">
                 {{ stats.suit.executed }}
               </div>
               <div class="text-sm text-blue-500 mb-1">/ {{ stats.suit.total }} 总数</div>
@@ -134,19 +133,18 @@ onMounted(() => {
           </div>
         </el-col>
         <el-col :span="12">
-          <div
-            class="p-4 bg-linear-to-br from-emerald-900/20 to-green-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
+          <div class="p-4 bg-linear-to-br from-emerald-900/20 to-green-900/20 rounded-xl border border-emerald-800">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-2">
                 <el-icon class="text-emerald-500 text-xl">
                   <Document />
                 </el-icon>
-                <span class="text-emerald-700 dark:text-emerald-300 font-medium">订单</span>
+                <span class="text-emerald-300 font-medium">订单</span>
               </div>
               <el-tag type="warning" size="small" effect="dark">请关注</el-tag>
             </div>
             <div class="flex items-end gap-4">
-              <div class="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+              <div class="text-3xl font-bold text-emerald-400">
                 {{ stats.order.executed }}
               </div>
               <div class="text-sm text-emerald-500 mb-1">/ {{ stats.order.total }} 总数</div>
@@ -187,9 +185,9 @@ onMounted(() => {
           </div>
         </el-col>
         <el-col :span="8">
-          <div class="p-3 bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
+          <div class="p-3 bg-[#1d1d1d] rounded-lg border border-gray-700">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-gray-700 dark:text-gray-300 font-medium">Fracture</span>
+              <span class="text-gray-300 font-medium">Fracture</span>
               <span class="text-xs text-gray-400">转档任务</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
@@ -210,9 +208,9 @@ onMounted(() => {
           </div>
         </el-col>
         <el-col :span="8">
-          <div class="p-3 bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
+          <div class="p-3 bg-[#1d1d1d] rounded-lg border border-gray-700">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-gray-700 dark:text-gray-300 font-medium">Density</span>
+              <span class="text-gray-300 font-medium">Density</span>
               <span class="text-xs text-gray-400">透光率任务</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
