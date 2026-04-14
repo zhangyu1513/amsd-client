@@ -162,7 +162,7 @@ onMounted(() => {
 
       <el-divider />
 
-      <div class="text-sm text-gray-500 dark:text-gray-400 mb-3 font-medium">任务执行状态</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mb-3 font-medium">数据处理任务</div>
       <el-row :gutter="16">
         <el-col :span="8">
           <div class="p-3 bg-gray-50 dark:bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
@@ -191,7 +191,7 @@ onMounted(() => {
           <div class="p-3 bg-gray-50 dark:bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between mb-2">
               <span class="text-gray-700 dark:text-gray-300 font-medium">Fracture</span>
-              <span class="text-xs text-gray-400">断裂分析</span>
+              <span class="text-xs text-gray-400">转档任务</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
               <div class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
@@ -214,7 +214,7 @@ onMounted(() => {
           <div class="p-3 bg-gray-50 dark:bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between mb-2">
               <span class="text-gray-700 dark:text-gray-300 font-medium">Density</span>
-              <span class="text-xs text-gray-400">密度分析</span>
+              <span class="text-xs text-gray-400">透光率任务</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
               <div class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
