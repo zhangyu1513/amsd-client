@@ -19,13 +19,13 @@ export function formatDate(date: string | Date | number, format = 'YYYY-MM-DD HH
  */
 export function formatFileSize(bytes: number, decimals = 2): string {
   if (bytes === 0) return '0 Bytes'
-  
+
   const k = 1024
   const dm = decimals < 0 ? 0 : decimals
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-  
+
   const i = Math.floor(Math.log(bytes) / Math.log(k))
-  
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
 
@@ -57,7 +57,7 @@ export function deepClone<T>(obj: T): T {
  */
 export function useDebounce<T extends (...args: any[]) => any>(
   fn: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   return debounce(fn, wait)
 }
@@ -69,7 +69,7 @@ export function useDebounce<T extends (...args: any[]) => any>(
  */
 export function useThrottle<T extends (...args: any[]) => any>(
   fn: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   return throttle(fn, wait)
 }
@@ -98,7 +98,11 @@ export function validatePhone(phone: string): boolean {
  * @param filename 文件名
  * @param type 文件类型
  */
-export function downloadFile(data: BlobPart, filename: string, type = 'application/octet-stream'): void {
+export function downloadFile(
+  data: BlobPart,
+  filename: string,
+  type = 'application/octet-stream',
+): void {
   const blob = new Blob([data], { type })
   const url = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
@@ -120,7 +124,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     return true
   } catch (err) {
     console.error('复制失败:', err)
-    
+
     // 降级方案
     const textArea = document.createElement('textarea')
     textArea.value = text
@@ -130,7 +134,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     document.body.appendChild(textArea)
     textArea.focus()
     textArea.select()
-    
+
     try {
       document.execCommand('copy')
       document.body.removeChild(textArea)
@@ -173,13 +177,13 @@ export function stringToColor(str: string): string {
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash)
   }
-  
+
   let color = '#'
   for (let i = 0; i < 3; i++) {
     const value = (hash >> (i * 8)) & 0xff
     color += ('00' + value.toString(16)).substr(-2)
   }
-  
+
   return color
 }
 
@@ -188,7 +192,7 @@ export function stringToColor(str: string): string {
  * @param ms 延迟毫秒数
  */
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export default {
