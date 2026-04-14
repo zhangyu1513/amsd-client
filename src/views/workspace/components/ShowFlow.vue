@@ -1,33 +1,13 @@
 <template>
-  <el-dialog
-    v-model="dialogVisible"
-    title="流程图"
-    :width="'80%'"
-    :top="'5vh'"
-    :close-on-click-modal="false"
-    class="show-flow-dialog"
-    @close="handleClose"
-  >
+  <el-dialog v-model="dialogVisible" title="流程节点" :width="'80%'" :top="'5vh'" destroy-on-close
+    :close-on-click-modal="false" :close-on-press-escape="false" class="show-flow-dialog" @close="handleClose">
     <div class="flow-container">
-      <VueFlow
-        v-if="dialogVisible"
-        :nodes="nodes"
-        :edges="edges"
-        :fit-view-on-init="true"
-        :min-zoom="0.1"
-        :max-zoom="2"
-        class="vue-flow-container"
-        @ready="handleFlowReady"
-      >
+      <VueFlow v-if="dialogVisible" :nodes="nodes" :edges="edges" :fit-view-on-init="true" :min-zoom="0.1" :max-zoom="2"
+        class="vue-flow-container" @ready="handleFlowReady">
         <Background pattern-color="#374151" :gap="16" />
         <Controls position="bottom-left" />
-        <MiniMap
-          position="bottom-right"
-          :pannable="true"
-          :zoomable="true"
-          node-color="#2d2d44"
-          mask-color="rgba(0, 0, 0, 0.3)"
-        />
+        <MiniMap position="bottom-right" :pannable="true" :zoomable="true" node-color="#2d2d44"
+          mask-color="rgba(0, 0, 0, 0.3)" />
       </VueFlow>
     </div>
   </el-dialog>
