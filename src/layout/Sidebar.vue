@@ -10,6 +10,17 @@ import {
   MessageBox,
   Tools,
   EditPen,
+  Connection,
+  Plus,
+  Minus,
+  Delete,
+  House,
+  ZoomIn,
+  ZoomOut,
+  FullScreen,
+  Download,
+  Share,
+  Link,
 } from '@element-plus/icons-vue'
 
 interface Props {
@@ -44,6 +55,17 @@ const iconMap: Record<string, any> = {
   MessageBox,
   Tools,
   EditPen,
+  Connection,
+  Plus,
+  Minus,
+  Delete,
+  House,
+  ZoomIn,
+  ZoomOut,
+  FullScreen,
+  Download,
+  Share,
+  Link,
 }
 
 // 获取图标组件
@@ -334,10 +356,21 @@ const getIconComponent = (iconName?: string) => {
 :deep(.el-menu--collapse) .el-sub-menu__title {
   display: flex;
   justify-content: center;
-  padding-left: 0 !important;
+  padding: 0 !important;
+  min-width: 64px;
+  position: relative;
 }
 
 :deep(.el-menu--collapse) .el-sub-menu__title .el-sub-menu__icon-arrow {
   display: none;
+}
+
+:deep(.el-menu--collapse) .el-sub-menu__title > .menu-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
