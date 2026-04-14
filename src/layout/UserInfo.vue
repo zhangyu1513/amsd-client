@@ -18,8 +18,8 @@ const props = withDefaults(defineProps<Props>(), {
   user: () => ({
     name: '管理员',
     avatar: '',
-    role: '管理员'
-  })
+    role: '管理员',
+  }),
 })
 
 const emit = defineEmits<{
@@ -57,7 +57,7 @@ const handleSettings = () => {
   <el-dropdown>
     <span class="flex items-center cursor-pointer">
       <el-avatar size="small" class="mr-2" :src="user.avatar">
-        {{ user.avatar ? '' : (user.name?.charAt(0) || '用户') }}
+        {{ user.avatar ? '' : user.name?.charAt(0) || '用户' }}
       </el-avatar>
       <span class="text-sm text-gray-700">{{ user.name?.toUpperCase() }}</span>
       <el-icon class="ml-1">

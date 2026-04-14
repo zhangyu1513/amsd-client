@@ -56,7 +56,9 @@ const handleSettings = () => {
 </script>
 
 <template>
-  <div :class="['flex items-center border-b border-dashed border-gray-600 h-16 min-w-0', props.class]">
+  <div
+    :class="['flex items-center border-b border-dashed border-gray-600 h-16 min-w-0', props.class]"
+  >
     <!-- Logo组件 -->
     <Logo :is-collapse="props.isCollapse" />
 
@@ -66,8 +68,12 @@ const handleSettings = () => {
         <!-- 面包屑导航 -->
         <div class="flex items-center h-full min-w-0">
           <el-breadcrumb separator="/" class="flex items-center h-full min-w-0">
-            <el-breadcrumb-item v-for="(item, index) in breadcrumbItems" :key="index"
-              :to="index === 0 ? { path: '/' } : undefined" class="flex items-center truncate">
+            <el-breadcrumb-item
+              v-for="(item, index) in breadcrumbItems"
+              :key="index"
+              :to="index === 0 ? { path: '/' } : undefined"
+              class="flex items-center truncate"
+            >
               <span class="truncate">{{ item }}</span>
             </el-breadcrumb-item>
           </el-breadcrumb>
@@ -76,11 +82,17 @@ const handleSettings = () => {
         <div class="flex items-center space-x-4 shrink-0">
           <slot name="user-info">
             <!-- 默认用户信息插槽 -->
-            <UserInfo v-if="userInfo" :user="{
-              name: userInfo.username,
-              avatar: userInfo.avatar,
-              role: userInfo.roles?.[0] || '用户'
-            }" @logout="handleLogout" @profile="handleProfile" @settings="handleSettings" />
+            <UserInfo
+              v-if="userInfo"
+              :user="{
+                name: userInfo.username,
+                avatar: userInfo.avatar,
+                role: userInfo.roles?.[0] || '用户',
+              }"
+              @logout="handleLogout"
+              @profile="handleProfile"
+              @settings="handleSettings"
+            />
             <div v-else class="flex items-center cursor-pointer">
               <el-avatar size="small" class="mr-2"></el-avatar>
               <span class="text-sm text-gray-700">未登录</span>

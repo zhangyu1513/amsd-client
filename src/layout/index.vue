@@ -22,7 +22,7 @@ const handleCreate = () => {
     <div class="flex w-full h-full">
       <!-- 侧边栏组件 -->
       <Sidebar :is-collapse="isCollapse" @toggle-collapse="handleToggleCollapse" />
-      
+
       <!-- 主内容区 -->
       <div class="flex-1 flex flex-col min-w-0 h-full">
         <!-- 顶部导航组件 -->
