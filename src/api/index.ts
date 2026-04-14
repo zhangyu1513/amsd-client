@@ -15,6 +15,7 @@ import type {
   DensitySearchParams,
   Density,
 } from './types'
+import type { getRunningTasks } from './dashboard'
 
 // 使用 env.ts 获取 API 配置
 const apiConfig = getApiConfig()
@@ -239,6 +240,30 @@ export const api = {
     getTaskDistributionData: async () => {
       const dashboardModule = await import('./dashboard')
       return dashboardModule.default.getTaskDistributionData()
+    },
+    getRealtimeActivities: async (params?: any) => {
+      const dashboardModule = await import('./dashboard')
+      return dashboardModule.default.getRealtimeActivities(params)
+    },
+    getNodes: async () => {
+      const dashboardModule = await import('./dashboard')
+      return dashboardModule.default.getNodes()
+    },
+    getNodeMonitor: async () => {
+      const dashboardModule = await import('./dashboard')
+      return dashboardModule.default.getNodeMonitor()
+    },
+    getTodayStats: async () => {
+      const dashboardModule = await import('./dashboard')
+      return dashboardModule.default.getTodayStats()
+    },
+    getHistoryStats: async () => {
+      const dashboardModule = await import('./dashboard')
+      return dashboardModule.default.getHistoryStats()
+    },
+    getRunningTasks: async () => {
+      const dashboardModule = await import('./dashboard')
+      return dashboardModule.default.getRunningTasks()
     },
   },
 }

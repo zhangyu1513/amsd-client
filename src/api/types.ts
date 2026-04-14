@@ -239,3 +239,41 @@ export interface Fiducial {
 
   ToolingID: number // 外键，not null
 }
+
+/**
+ * NodeStatus 表示单台服务器在某一时刻的状态
+ */
+export interface NodeStatus {
+  Timestamp: Date // 数据收集的时间戳
+  CPU: number // CPU 使用率 (0-100)
+  Memory: number // 内存使用率 (0-100)
+  Disk: number // 磁盘使用率 (0-100)
+  LoadAvg: number // 系统负载 (1分钟)
+  NetIn: number // 网络入站字节
+  NetOut: number // 网络出站字节
+}
+
+/**
+ * NodeMonitor 用于管理所有服务器的数据
+ */
+export interface NodeMonitor {
+  History: Record<string, NodeStatus[]> // Key是服务器IP，Value是历史数据列表
+}
+
+/**
+ * 代表一个远程计算服务器，包含连接信息和运行状态
+ */
+export interface Node {
+  ID: number // 节点唯一标识符
+  Type: string // 节点类型：cats/smrc
+  Name: string // 节点名称
+  Host: string // 节点IP地址或主机名
+  Port: number // SSH端口号
+  Username: string // SSH用户名
+  Password: string // SSH密码
+  Workspace: string // 远程工作目录
+  ExePath: string // 可执行文件路径
+  Threads: number // 节点总线程数
+  Ipc: number // IPC性能指数
+  Loaded: number // 已占用线程数
+}

@@ -1,16 +1,85 @@
 // 仪表盘API
 import { http } from './index'
+import type {
+  SuitSearchParams,
+  ProcessSearchParams,
+  FractureSearchParams,
+  DensitySearchParams,
+  Node,
+  NodeMonitor,
+} from './types'
 
 // 统计数据
 export interface DashboardStats {
-  totalSuits: number
-  totalOrders: number
-  totalProcesses: number
-  activeTasks: number
-  todayNewSuits: number
-  todayNewOrders: number
-  successRate: number
-  avgProcessTime: number
+  TodayNewSuits: number
+  UnprocessedSuits: number
+  TodayExecutedSuits?: number
+  TodayPendingSuits?: number
+  TodayExecutedOrders?: number
+  TodayPendingOrders?: number
+  TodayNewOrders?: number
+  TodayProcessCount?: number
+  TodayFractureCount?: number
+  TodayDensityCount?: number
+  RunningProcessCount?: number
+  ErrorProcessCount?: number
+  RunningFractureCount?: number
+  ErrorFractureCount?: number
+  RunningDensityCount?: number
+  ErrorDensityCount?: number
+}
+
+export interface TodayStats {
+  ExecutedSuits?: number
+  PendingSuits?: number
+  ExecutedOrders?: number
+  PendingOrders?: number
+
+  RunningProcessCount?: number
+  PendingProcessCount?: number
+  ErrorProcessCount?: number
+
+  RunningFractureCount?: number
+  PendingFractureCount?: number
+  ErrorFractureCount?: number
+
+  RunningDensityCount?: number
+  PendingDensityCount?: number
+  ErrorDensityCount?: number
+}
+
+export interface HistoryStats extends TodayStats {}
+
+export interface RunningTask {
+  Type?: string
+  LocalWorkspace?: string
+  RunningTime?: number
+}
+
+/**
+ * 获取节点列表
+ */
+export async function getNodes(): Promise<Node[]> {
+  try {
+    const response = await http.get<Node[]>('/api/v2/nodes')
+    return response
+  } catch (error) {
+    console.error('获取节点列表失败:', error)
+    throw error
+  }
+}
+
+/**
+ * 获取节点监控数据
+ */
+export async function getNodeMonitor(): Promise<NodeMonitor> {
+  try {
+    const response = await http.get<NodeMonitor>('/api/v2/dashboard/node-monitor')
+    return response
+  } catch (error) {
+    console.error('获取节点监控数据失败:', error)
+    throw error
+  }
 }
 
 // 任务趋势数据
@@ -40,7 +109,7 @@ export interface PerformanceMetrics {
  */
 export async function getDashboardStats(): Promise<DashboardStats> {
   try {
-    const response = await http.get<DashboardStats>('/api/dashboard/stats')
+    const response = await http.get<DashboardStats>('/api/v2/dashboard/stats')
     return response
   } catch (error) {
     console.error('获取仪表盘统计数据失败:', error)
@@ -70,7 +139,9 @@ export async function getTaskTrendData(params?: {
  */
 export async function getTaskDistributionData(): Promise<TaskDistributionData[]> {
   try {
-    const response = await http.get<TaskDistributionData[]>('/api/dashboard/chart/task-distribution')
+    const response = await http.get<TaskDistributionData[]>(
+      '/api/dashboard/chart/task-distribution',
+    )
     return response
   } catch (error) {
     console.error('获取任务分布数据失败:', error)
@@ -94,25 +165,27 @@ export async function getPerformanceMetrics(): Promise<PerformanceMetrics> {
 /**
  * 获取实时活动数据
  */
-export async function getRealtimeActivities(params?: {
-  limit?: number
-}): Promise<Array<{
-  id: number
-  type: string
-  title: string
-  description: string
-  timestamp: string
-  user: string
-}>> {
+export async function getRealtimeActivities(params?: { limit?: number }): Promise<
+  Array<{
+    id: number
+    type: string
+    title: string
+    description: string
+    timestamp: string
+    user: string
+  }>
+> {
   try {
-    const response = await http.get<Array<{
-      id: number
-      type: string
-      title: string
-      description: string
-      timestamp: string
-      user: string
-    }>>('/api/dashboard/realtime-activities', { params })
+    const response = await http.get<
+      Array<{
+        id: number
+        type: string
+        title: string
+        description: string
+        timestamp: string
+        user: string
+      }>
+    >('/api/dashboard/realtime-activities', { params })
     return response
   } catch (error) {
     console.error('获取实时活动数据失败:', error)
@@ -178,28 +251,71 @@ export async function getAlerts(params?: {
   level?: string
   status?: string
   limit?: number
-}): Promise<Array<{
-  id: number
-  level: 'info' | 'warning' | 'error' | 'critical'
-  title: string
-  message: string
-  timestamp: string
-  status: 'new' | 'acknowledged' | 'resolved'
-  source: string
-}>> {
+}): Promise<
+  Array<{
+    id: number
+    level: 'info' | 'warning' | 'error' | 'critical'
+    title: string
+    message: string
+    timestamp: string
+    status: 'new' | 'acknowledged' | 'resolved'
+    source: string
+  }>
+> {
   try {
-    const response = await http.get<Array<{
-      id: number
-      level: 'info' | 'warning' | 'error' | 'critical'
-      title: string
-      message: string
-      timestamp: string
-      status: 'new' | 'acknowledged' | 'resolved'
-      source: string
-    }>>('/api/dashboard/alerts', { params })
+    const response = await http.get<
+      Array<{
+        id: number
+        level: 'info' | 'warning' | 'error' | 'critical'
+        title: string
+        message: string
+        timestamp: string
+        status: 'new' | 'acknowledged' | 'resolved'
+        source: string
+      }>
+    >('/api/dashboard/alerts', { params })
     return response
   } catch (error) {
     console.error('获取预警信息失败:', error)
+    throw error
+  }
+}
+
+/**
+ * 获取今日统计
+ */
+export async function getTodayStats(): Promise<TodayStats> {
+  try {
+    const response = await http.get<TodayStats>('/api/v2/dashboard/today_stats')
+    return response
+  } catch (error) {
+    console.error('获取今日统计失败:', error)
+    throw error
+  }
+}
+
+/**
+ * 获取历史统计
+ */
+export async function getHistoryStats(): Promise<HistoryStats> {
+  try {
+    const response = await http.get<HistoryStats>('/api/v2/dashboard/history_stats')
+    return response
+  } catch (error) {
+    console.error('获取今日统计失败:', error)
+    throw error
+  }
+}
+
+/**
+ * 获取历史统计
+ */
+export async function getRunningTasks(): Promise<RunningTask[]> {
+  try {
+    const response = await http.get<RunningTask[]>('/api/v2/dashboard/running_tasks')
+    return response
+  } catch (error) {
+    console.error('获取今日统计失败:', error)
     throw error
   }
 }
@@ -269,5 +385,10 @@ export default {
   getBusinessMetrics,
   getAlerts,
   getDashboardConfig,
-  updateDashboardConfig
+  updateDashboardConfig,
+  getNodes,
+  getNodeMonitor,
+  getTodayStats,
+  getHistoryStats,
+  getRunningTasks,
 }
