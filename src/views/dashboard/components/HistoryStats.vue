@@ -110,7 +110,7 @@ onMounted(() => {
       <el-row :gutter="24">
         <el-col :span="12">
           <div
-            class="p-4 bg-linear-to-br dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+            class="p-4 bg-linear-to-br from-blue-900/20 to-cyan-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-2">
                 <el-icon class="text-blue-500 text-xl">
@@ -135,7 +135,7 @@ onMounted(() => {
         </el-col>
         <el-col :span="12">
           <div
-            class="p-4 bg-linear-to-br dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
+            class="p-4 bg-linear-to-br from-emerald-900/20 to-green-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-2">
                 <el-icon class="text-emerald-500 text-xl">
@@ -164,21 +164,21 @@ onMounted(() => {
 
       <el-row :gutter="16">
         <el-col :span="8">
-          <div class="p-3 dark:bg-[#1d1d1d] rounded-lg border dark:border-gray-700">
+          <div class="p-3 bg-[#1d1d1d] rounded-lg border border-gray-700">
             <div class="flex items-center justify-between mb-2">
               <span class="text-gray-700 dark:text-gray-300 font-medium">Process</span>
               <span class="text-xs text-gray-400">任务处理</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
-              <div class="p-2 dark:bg-blue-900/30 rounded-lg">
+              <div class="p-2 bg-blue-900/30 rounded-lg">
                 <div class="text-xl font-bold text-blue-500">{{ stats.process.running }}</div>
                 <div class="text-xs text-blue-400">运行</div>
               </div>
-              <div class="p-2 dark:bg-yellow-900/30 rounded-lg">
+              <div class="p-2 bg-yellow-900/30 rounded-lg">
                 <div class="text-xl font-bold text-yellow-500">{{ stats.process.pending }}</div>
                 <div class="text-xs text-yellow-400">等待</div>
               </div>
-              <div class="p-2 dark:bg-red-900/30 rounded-lg">
+              <div class="p-2 bg-red-900/30 rounded-lg">
                 <div class="text-xl font-bold text-red-500">{{ stats.process.error }}</div>
                 <div class="text-xs text-red-400">错误</div>
               </div>
@@ -187,21 +187,21 @@ onMounted(() => {
           </div>
         </el-col>
         <el-col :span="8">
-          <div class="p-3 dark:bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
+          <div class="p-3 bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between mb-2">
               <span class="text-gray-700 dark:text-gray-300 font-medium">Fracture</span>
               <span class="text-xs text-gray-400">转档任务</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
-              <div class="p-2 dark:bg-blue-900/30 rounded-lg">
+              <div class="p-2 bg-blue-900/30 rounded-lg">
                 <div class="text-xl font-bold text-blue-500">{{ stats.fracture.running }}</div>
                 <div class="text-xs text-blue-400">运行</div>
               </div>
-              <div class="p-2 dark:bg-yellow-900/30 rounded-lg">
+              <div class="p-2 bg-yellow-900/30 rounded-lg">
                 <div class="text-xl font-bold text-yellow-500">{{ stats.fracture.pending }}</div>
                 <div class="text-xs text-yellow-400">等待</div>
               </div>
-              <div class="p-2 dark:bg-red-900/30 rounded-lg">
+              <div class="p-2 bg-red-900/30 rounded-lg">
                 <div class="text-xl font-bold text-red-500">{{ stats.fracture.error }}</div>
                 <div class="text-xs text-red-400">错误</div>
               </div>
@@ -210,21 +210,21 @@ onMounted(() => {
           </div>
         </el-col>
         <el-col :span="8">
-          <div class="p-3 dark:bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
+          <div class="p-3 bg-[#1d1d1d] rounded-lg border border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between mb-2">
               <span class="text-gray-700 dark:text-gray-300 font-medium">Density</span>
               <span class="text-xs text-gray-400">透光率任务</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
-              <div class="p-2 dark:bg-blue-900/30 rounded-lg">
+              <div class="p-2 bg-blue-900/30 rounded-lg">
                 <div class="text-xl font-bold text-blue-500">{{ stats.density.running }}</div>
                 <div class="text-xs text-blue-400">运行</div>
               </div>
-              <div class="p-2 dark:bg-yellow-900/30 rounded-lg">
+              <div class="p-2 bg-yellow-900/30 rounded-lg">
                 <div class="text-xl font-bold text-yellow-500">{{ stats.density.pending }}</div>
                 <div class="text-xs text-yellow-400">等待</div>
               </div>
-              <div class="p-2 dark:bg-red-900/30 rounded-lg">
+              <div class="p-2 bg-red-900/30 rounded-lg">
                 <div class="text-xl font-bold text-red-500">{{ stats.density.error }}</div>
                 <div class="text-xs text-red-400">错误</div>
               </div>
