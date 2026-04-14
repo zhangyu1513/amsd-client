@@ -26,6 +26,7 @@ import type {
 import AddProcess from './components/AddProcess.vue'
 import ShowFracture from './components/ShowFracture.vue'
 import ShowDensity from './components/ShowDensity.vue'
+import ShowFlow from './components/ShowFlow.vue'
 
 // 表格数据
 const tableData = ref<Suit[]>([])
@@ -189,6 +190,19 @@ const closeAddDensityDialog = () => {
   selectedProcess.value = {}
 }
 
+const selectedSuit = ref<Suit | null>(null)
+const showFlowDialog = ref(false)
+
+const openShowFlowDialog = (suit: Suit) => {
+  selectedSuit.value = suit
+  showFlowDialog.value = true
+}
+
+const closeShowFlowDialog = () => {
+  showFlowDialog.value = false
+  selectedSuit.value = null
+}
+
 watch(
   processTableData,
   () => {
@@ -215,142 +229,57 @@ const loadProcessData = (suitId: number) => {
 
         <!-- 表格区域 - 占据剩余高度 -->
         <div class="flex-1 min-h-0 relative">
-          <el-table
-            :data="tableData"
-            border
-            show-overflow-tooltip
-            v-loading="tableLoading"
-            size="small"
-            class="w-full"
-            height="100%"
-            :class="{ 'table-loading': tableLoading }"
-            :data-version="dataVersion"
-            row-key="ID"
-            :expand-row-keys="expandedRowKeys"
-            @expand-change="handleExpandChange"
-          >
+          <el-table :data="tableData" border show-overflow-tooltip v-loading="tableLoading" size="small" class="w-full"
+            height="100%" :class="{ 'table-loading': tableLoading }" :data-version="dataVersion" row-key="ID"
+            :expand-row-keys="expandedRowKeys" @expand-change="handleExpandChange">
             <el-table-column type="expand" width="40">
               <template #default="props">
                 <el-row class="w-full h-full p-4">
                   <el-col :span="24" class="h-full">
                     <div class="h-full flex flex-col">
                       <div class="flex-1 min-h-0 relative">
-                        <el-table
-                          :data="processTableData"
-                          show-overflow-tooltip
-                          v-loading="processTableLoading"
-                          default-expand-all
-                          size="small"
-                          class="w-full"
-                          height="232px"
-                          :class="{ 'table-loading': processTableLoading }"
-                          :data-version="processDataVersion"
-                        >
-                          <el-table-column
-                            type="index"
-                            label="#"
-                            align="center"
-                            header-align="center"
-                            width="50"
-                          />
-                          <el-table-column
-                            prop="CreatedAt"
-                            label="创建时间"
-                            align="center"
-                            header-align="center"
-                            width="160"
-                          >
+                        <el-table :data="processTableData" show-overflow-tooltip v-loading="processTableLoading"
+                          default-expand-all size="small" class="w-full" height="232px"
+                          :class="{ 'table-loading': processTableLoading }" :data-version="processDataVersion">
+                          <el-table-column type="index" label="#" align="center" header-align="center" width="50" />
+                          <el-table-column prop="CreatedAt" label="创建时间" align="center" header-align="center"
+                            width="160">
                             <template #default="scope">
                               {{ formatDate(scope.row.CreatedAt) }}
                             </template>
                           </el-table-column>
-                          <el-table-column
-                            prop="UpdatedAt"
-                            label="更新时间"
-                            align="center"
-                            header-align="center"
-                            width="160"
-                          >
+                          <el-table-column prop="UpdatedAt" label="更新时间" align="center" header-align="center"
+                            width="160">
                             <template #default="scope">
                               {{ formatDate(scope.row.UpdatedAt) }}
                             </template>
                           </el-table-column>
-                          <el-table-column
-                            label="状态"
-                            prop="Status"
-                            align="center"
-                            header-align="center"
-                            width="100"
-                          >
+                          <el-table-column label="状态" prop="Status" align="center" header-align="center" width="100">
                             <template #default="scope">
-                              <el-tag v-if="scope.row.Status === 'open'" type="success" size="small"
-                                >进行中</el-tag
-                              >
-                              <el-tag
-                                v-else-if="scope.row.Status === 'close'"
-                                type="danger"
-                                size="small"
-                                >已关闭</el-tag
-                              >
+                              <el-tag v-if="scope.row.Status === 'open'" type="success" size="small">进行中</el-tag>
+                              <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small">已关闭</el-tag>
                               <el-tag v-else type="info" size="small">未知</el-tag>
                             </template>
                           </el-table-column>
-                          <el-table-column
-                            label="运行状态"
-                            prop="State"
-                            align="center"
-                            header-align="center"
-                            width="100"
-                          >
+                          <el-table-column label="运行状态" prop="State" align="center" header-align="center" width="100">
                             <template #default="scope">
-                              <el-tag
-                                v-if="scope.row.State === 'completed'"
-                                type="success"
-                                size="small"
-                                >已完成</el-tag
-                              >
-                              <el-tag
-                                v-else-if="scope.row.State === 'failed'"
-                                type="danger"
-                                size="small"
-                                >错误</el-tag
-                              >
-                              <el-tag
-                                v-else-if="scope.row.State === 'running'"
-                                type="warning"
-                                size="small"
-                                >运行中</el-tag
-                              >
+                              <el-tag v-if="scope.row.State === 'completed'" type="success" size="small">已完成</el-tag>
+                              <el-tag v-else-if="scope.row.State === 'failed'" type="danger" size="small">错误</el-tag>
+                              <el-tag v-else-if="scope.row.State === 'running'" type="warning" size="small">运行中</el-tag>
                               <el-tag v-else type="info" size="small">{{ scope.row.State }}</el-tag>
                             </template>
                           </el-table-column>
-                          <el-table-column
-                            prop="Orders"
-                            label="Orders"
-                            align="center"
-                            header-align="center"
-                            width="240"
-                          />
-                          <el-table-column
-                            prop="LinkedAddress"
-                            label="关联地址"
-                            align="center"
-                            header-align="center"
-                            width="300"
-                          >
+                          <el-table-column prop="Orders" label="Orders" align="center" header-align="center"
+                            width="240" />
+                          <el-table-column prop="LinkedAddress" label="关联地址" align="center" header-align="center"
+                            width="300">
                             <template #default="scope">
                               <div class="flex items-center justify-between">
                                 <span class="truncate flex-1 mr-2" :title="scope.row.LinkedAddress">
                                   {{ scope.row.LinkedAddress || '-' }}
                                 </span>
-                                <el-button
-                                  v-if="scope.row.LinkedAddress"
-                                  type="primary"
-                                  link
-                                  size="small"
-                                  class="copy-btn"
-                                  @click.stop="copyToClipboard(scope.row.LinkedAddress)"
-                                >
+                                <el-button v-if="scope.row.LinkedAddress" type="primary" link size="small"
+                                  class="copy-btn" @click.stop="copyToClipboard(scope.row.LinkedAddress)">
                                   <el-icon>
                                     <CopyDocument />
                                   </el-icon>
@@ -358,26 +287,15 @@ const loadProcessData = (suitId: number) => {
                               </div>
                             </template>
                           </el-table-column>
-                          <el-table-column
-                            prop="LocalAddress"
-                            label="本地地址"
-                            align="center"
-                            header-align="center"
-                            width="500"
-                          >
+                          <el-table-column prop="LocalAddress" label="本地地址" align="center" header-align="center"
+                            width="500">
                             <template #default="scope">
                               <div class="flex items-center justify-between">
                                 <span class="truncate flex-1 mr-2" :title="scope.row.LocalAddress">
                                   {{ scope.row.LocalAddress || '-' }}
                                 </span>
-                                <el-button
-                                  v-if="scope.row.LocalAddress"
-                                  type="primary"
-                                  link
-                                  size="small"
-                                  class="copy-btn"
-                                  @click.stop="copyToClipboard(scope.row.LocalAddress)"
-                                >
+                                <el-button v-if="scope.row.LocalAddress" type="primary" link size="small"
+                                  class="copy-btn" @click.stop="copyToClipboard(scope.row.LocalAddress)">
                                   <el-icon>
                                     <CopyDocument />
                                   </el-icon>
@@ -385,80 +303,32 @@ const loadProcessData = (suitId: number) => {
                               </div>
                             </template>
                           </el-table-column>
-                          <el-table-column
-                            prop="EDA"
-                            label="EDA"
-                            align="center"
-                            header-align="center"
-                            width="120"
-                          />
-                          <el-table-column
-                            prop="Threads"
-                            label="线程数"
-                            align="center"
-                            header-align="center"
-                            width="80"
-                          />
-                          <el-table-column
-                            prop="Priority"
-                            label="优先级"
-                            align="center"
-                            header-align="center"
-                            width="80"
-                          >
+                          <el-table-column prop="EDA" label="EDA" align="center" header-align="center" width="120" />
+                          <el-table-column prop="Threads" label="线程数" align="center" header-align="center" width="80" />
+                          <el-table-column prop="Priority" label="优先级" align="center" header-align="center" width="80">
                             <template #default="scope">
-                              <el-tag v-if="scope.row.Priority === 1" type="danger" size="small"
-                                >高</el-tag
-                              >
-                              <el-tag
-                                v-else-if="scope.row.Priority === 2"
-                                type="warning"
-                                size="small"
-                                >中</el-tag
-                              >
-                              <el-tag
-                                v-else-if="scope.row.Priority === 3"
-                                type="primary"
-                                size="small"
-                                >低</el-tag
-                              >
+                              <el-tag v-if="scope.row.Priority === 1" type="danger" size="small">高</el-tag>
+                              <el-tag v-else-if="scope.row.Priority === 2" type="warning" size="small">中</el-tag>
+                              <el-tag v-else-if="scope.row.Priority === 3" type="primary" size="small">低</el-tag>
                               <el-tag v-else type="info" size="small">{{
                                 scope.row.Priority
-                              }}</el-tag>
+                                }}</el-tag>
                             </template>
                           </el-table-column>
-                          <el-table-column
-                            label="操作"
-                            align="center"
-                            header-align="center"
-                            width="250"
-                            fixed="right"
-                          >
+                          <el-table-column label="操作" align="center" header-align="center" width="250" fixed="right">
                             <template #default="scope">
                               <div class="flex justify-center space-x-1">
                                 <el-button type="primary" size="small" link disabled>
                                   LVL
                                 </el-button>
-                                <el-button
-                                  type="primary"
-                                  size="small"
-                                  link
-                                  @click="openAddFractureDialog(scope.row)"
-                                  :disabled="
-                                    scope.row.State != 'completed' || scope.row.Status === 'close'
-                                  "
-                                >
+                                <el-button type="primary" size="small" link @click="openAddFractureDialog(scope.row)"
+                                  :disabled="scope.row.State != 'completed' || scope.row.Status === 'close'
+                                    ">
                                   Fracture
                                 </el-button>
-                                <el-button
-                                  type="primary"
-                                  size="small"
-                                  link
-                                  @click="openAddDensityDialog(scope.row)"
-                                  :disabled="
-                                    scope.row.State != 'completed' || scope.row.Status === 'close'
-                                  "
-                                >
+                                <el-button type="primary" size="small" link @click="openAddDensityDialog(scope.row)"
+                                  :disabled="scope.row.State != 'completed' || scope.row.Status === 'close'
+                                    ">
                                   Density
                                 </el-button>
                                 <el-button type="primary" size="small" link disabled>
@@ -470,18 +340,11 @@ const loadProcessData = (suitId: number) => {
                         </el-table>
                       </div>
                       <div class="h-6 shrink-0 flex items-center justify-center mt-2 mb-2">
-                        <el-pagination
-                          v-model:current-page="paginationFormProcess.Page"
-                          v-model:page-size="paginationFormProcess.PageSize"
-                          :page-sizes="[5, 10, 20, 50]"
-                          size="small"
-                          :background="true"
-                          layout="total, sizes, prev, pager, next, jumper"
-                          :total="processTotal"
-                          @size-change="handleProcessSizeChange"
-                          @current-change="handleProcessPageChange"
-                          class="justify-center pagination-compact"
-                        />
+                        <el-pagination v-model:current-page="paginationFormProcess.Page"
+                          v-model:page-size="paginationFormProcess.PageSize" :page-sizes="[5, 10, 20, 50]" size="small"
+                          :background="true" layout="total, sizes, prev, pager, next, jumper" :total="processTotal"
+                          @size-change="handleProcessSizeChange" @current-change="handleProcessPageChange"
+                          class="justify-center pagination-compact" />
                       </div>
                     </div>
                   </el-col>
@@ -505,85 +368,61 @@ const loadProcessData = (suitId: number) => {
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="Number"
-              label="套单编号"
-              align="center"
-              header-align="center"
-              width="140"
-            >
+            <el-table-column label="流程节点" align="center" header-align="center" width="100">
+              <template #default="scope">
+                <div class="flex justify-center space-x-1" :style="{ '--row-index': scope.$index }">
+                  <el-button type="primary" size="small" link @click="openShowFlowDialog(scope.row)">
+                    <el-icon>
+                      <Tickets />
+                    </el-icon>
+                  </el-button>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="CreatedAt" label="创建时间" align="center" header-align="center" width="160">
+              <template #default="scope">
+                {{ formatDate(scope.row.CreatedAt) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="UpdatedAt" label="更新时间" align="center" header-align="center" width="160">
+              <template #default="scope">
+                {{ formatDate(scope.row.UpdatedAt) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="Number" label="套单编号" align="center" header-align="center" width="140">
               <template #default="{ row, $index }">
                 <span :style="{ '--row-index': $index }">{{ row.Number }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="CustomerCode"
-              label="客户编号"
-              align="center"
-              header-align="center"
-              width="120"
-            />
-            <el-table-column
-              prop="CustomerName"
-              label="客户名称"
-              align="center"
-              header-align="center"
-            />
-            <el-table-column
-              label="生命周期"
-              prop="Status"
-              align="center"
-              header-align="center"
-              width="100"
-            >
+            <el-table-column prop="CustomerCode" label="客户编号" align="center" header-align="center" width="120" />
+            <el-table-column prop="CustomerName" label="客户名称" align="center" header-align="center" />
+            <el-table-column label="生命周期" prop="Status" align="center" header-align="center" width="100">
               <template #default="scope">
                 <el-tag v-if="scope.row.Status === 'open'" type="success" size="small">OPEN</el-tag>
-                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small"
-                  >CLOSE</el-tag
-                >
+                <el-tag v-else-if="scope.row.Status === 'close'" type="danger" size="small">CLOSE</el-tag>
                 <el-tag v-else type="info" size="small">未知</el-tag>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="Saler"
-              label="锁定人员"
-              align="center"
-              header-align="center"
-              width="100"
-            />
+            <el-table-column prop="Saler" label="锁定人员" align="center" header-align="center" width="100" />
           </el-table>
         </div>
 
         <!-- 分页组件 - 固定高度24px -->
         <div class="h-6 shrink-0 flex items-center justify-center mt-2 mb-2">
-          <el-pagination
-            v-model:current-page="paginationForm.Page"
-            v-model:page-size="paginationForm.PageSize"
-            :page-sizes="[5, 10, 20, 50]"
-            size="small"
-            :background="true"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handlePageChange"
-            class="justify-center pagination-compact"
-          />
+          <el-pagination v-model:current-page="paginationForm.Page" v-model:page-size="paginationForm.PageSize"
+            :page-sizes="[5, 10, 20, 50]" size="small" :background="true"
+            layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange"
+            @current-change="handlePageChange" class="justify-center pagination-compact" />
         </div>
       </div>
     </el-col>
     <!-- AddProcess组件 -->
     <AddProcess :visible="addProcessFlag" :suit="addProcessParam" @close="closeAddProcess" />
     <!-- ShowFracture组件 -->
-    <ShowFracture
-      :visible="showAddFractureDialog"
-      :process="selectedProcess"
-      @close="closeAddFractureDialog"
-    />
+    <ShowFracture :visible="showAddFractureDialog" :process="selectedProcess" @close="closeAddFractureDialog" />
     <!-- ShowDensity组件 -->
-    <ShowDensity
-      :visible="showAddDensityDialog"
-      :process="selectedProcess"
-      @close="closeAddDensityDialog"
-    />
+    <ShowDensity :visible="showAddDensityDialog" :process="selectedProcess" @close="closeAddDensityDialog" />
+    <!-- ShowFlow组件 -->
+    <ShowFlow :visible="showFlowDialog" :suit-id="selectedSuit?.ID ?? 0" @close="closeShowFlowDialog" />
   </el-row>
 </template>

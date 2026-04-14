@@ -23,8 +23,8 @@ const loading = ref(false)
 // 表格选择变化处理
 const handleSelectionChange = (selection: Order[]) => {
   checkedOrders.value = selection
-    .filter(order => order.Number)
-    .map(order => order.Number!) as string[]
+    .filter((order) => order.Number)
+    .map((order) => order.Number!) as string[]
 }
 
 // 判断订单是否可选
@@ -35,7 +35,7 @@ const selectable = (row: Order, index: number) => {
 }
 
 // 定义组件Emits
-const emit = defineEmits(["close"])
+const emit = defineEmits(['close'])
 
 // 加载订单
 const loadOrders = async () => {
@@ -54,18 +54,17 @@ const loadOrders = async () => {
 // 关闭Dialog
 const handleClose = () => {
   resetForm()
-  emit("close")
+  emit('close')
 }
 
 // 重置表单
 const resetForm = () => {
-  process.LinkedAddress = ""
+  process.LinkedAddress = ''
   checkedOrders.value = []
 }
 
 // 提交表单
 const handleSubmit = async () => {
-
   try {
     // 去除空格
     process.LinkedAddress = process.LinkedAddress?.trim()
@@ -73,16 +72,15 @@ const handleSubmit = async () => {
     const submitData: Process = {
       ...process,
       SuitID: props.suit.ID,
-      Orders: checkedOrders.value.join(';') // 将选中的订单编号用逗号分隔
+      Orders: checkedOrders.value.join(';'), // 将选中的订单编号用逗号分隔
     }
-
 
     // 调用API创建处理任务
     loading.value = true
     const loadingInstance = ElLoading.service({
       lock: true,
       text: '正在创建处理任务...',
-      background: 'rgba(0, 0, 0, 0.7)'
+      background: 'rgba(0, 0, 0, 0.7)',
     })
 
     try {
@@ -99,7 +97,6 @@ const handleSubmit = async () => {
       loadingInstance.close()
       loading.value = false
     }
-
   } catch (error) {
     console.error('表单验证失败:', error)
     // 验证失败时不需要显示错误消息，Element Plus会自动显示
@@ -109,24 +106,40 @@ const handleSubmit = async () => {
 const dialogVisible = ref(false)
 
 // 监听visible变化，重置表单
-watch(() => props.visible, (newVal) => {
-  dialogVisible.value = props.visible
-  if (newVal) {
-    resetForm()
-    loadOrders()
-  }
-})
-
+watch(
+  () => props.visible,
+  (newVal) => {
+    dialogVisible.value = props.visible
+    if (newVal) {
+      resetForm()
+      loadOrders()
+    }
+  },
+)
 </script>
 
 <template>
-  <el-dialog v-model="dialogVisible" title="添加处理任务" width="600px" :close-on-click-modal="false"
-    :close-on-press-escape="false" :show-close="false" draggable @close="handleClose">
+  <el-dialog
+    v-model="dialogVisible"
+    title="添加处理任务"
+    width="600px"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :show-close="false"
+    draggable
+    @close="handleClose"
+  >
     <!-- 表单内容 -->
-    <el-form ref="formRef" :model="process" size="small" label-width="100px" label-position="top"
-      class="w-full pl-2 pr-2">
+    <el-form
+      ref="formRef"
+      :model="process"
+      size="small"
+      label-width="100px"
+      label-position="top"
+      class="w-full pl-2 pr-2"
+    >
       <el-form-item label="选择订单" prop="Orders" class="w-full">
-        <div class="order-table-container" :class="{ 'loading': loading }">
+        <div class="order-table-container" :class="{ loading: loading }">
           <div v-if="loading" class="loading-overlay">
             <el-icon class="loading-icon">
               <Loading />
@@ -141,8 +154,16 @@ watch(() => props.visible, (newVal) => {
             <p>暂无订单数据</p>
           </div>
 
-          <el-table v-if="orders.length > 0" :data="orders" border size="small" class="w-full" max-height="250px"
-            @selection-change="handleSelectionChange" :row-key="(row: Order) => row.Number || ''">
+          <el-table
+            v-if="orders.length > 0"
+            :data="orders"
+            border
+            size="small"
+            class="w-full"
+            max-height="250px"
+            @selection-change="handleSelectionChange"
+            :row-key="(row: Order) => row.Number || ''"
+          >
             <el-table-column type="selection" :selectable="selectable" align="center" width="40" />
             <el-table-column prop="Number" label="订单编号" align="center" />
             <el-table-column prop="ModelNumber" label="ModelNumber" align="center" width="160">
@@ -157,7 +178,11 @@ watch(() => props.visible, (newVal) => {
             </el-table-column>
             <el-table-column prop="Status" label="状态" align="center" width="80">
               <template #default="scope">
-                <el-tag v-if="scope.row.Status" :type="scope.row.Status === 'open' ? 'success' : 'info'" size="small">
+                <el-tag
+                  v-if="scope.row.Status"
+                  :type="scope.row.Status === 'open' ? 'success' : 'info'"
+                  size="small"
+                >
                   {{ scope.row.Status === 'open' ? '进行中' : scope.row.Status }}
                 </el-tag>
                 <span v-else>未设置</span>
@@ -168,8 +193,12 @@ watch(() => props.visible, (newVal) => {
       </el-form-item>
 
       <el-form-item label="关联地址" prop="LinkedAddress">
-        <el-input v-model="process.LinkedAddress" placeholder="请输入Linux文件夹路径, 例如: /home/user/xxx" clearable
-          :disabled="loading" />
+        <el-input
+          v-model="process.LinkedAddress"
+          placeholder="请输入Linux文件夹路径, 例如: /home/user/xxx"
+          clearable
+          :disabled="loading"
+        />
       </el-form-item>
     </el-form>
 
@@ -177,8 +206,12 @@ watch(() => props.visible, (newVal) => {
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleClose" :disabled="loading">关闭</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="loading"
-          :disabled="checkedOrders.length === 0 || process.LinkedAddress?.trim() === ''">
+        <el-button
+          type="primary"
+          @click="handleSubmit"
+          :loading="loading"
+          :disabled="checkedOrders.length === 0 || process.LinkedAddress?.trim() === ''"
+        >
           提交
         </el-button>
       </div>
@@ -264,7 +297,6 @@ watch(() => props.visible, (newVal) => {
   border-radius: 4px;
   overflow: hidden;
 }
-
 
 :deep(.el-table .el-checkbox) {
   margin: 0;
