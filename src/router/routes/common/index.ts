@@ -12,6 +12,18 @@ const drawRoute: RouteRecordRaw = {
   name: 'Draw',
 }
 
+const mindmapRoute: RouteRecordRaw = {
+  path: 'mindmap',
+  component: () => import('@/views/common/mindmap/index.vue'),
+  meta: {
+    title: '思维导图',
+    icon: 'Connection',
+    showInMenu: true,
+    requiresAuth: true,
+  },
+  name: 'MindMap',
+}
+
 export default {
   path: '/common',
   redirect: '/common/draw',
@@ -22,5 +34,5 @@ export default {
     order: 3,
     requiresAuth: true,
   },
-  children: [drawRoute],
+  children: [drawRoute, mindmapRoute],
 } satisfies RouteRecordRaw

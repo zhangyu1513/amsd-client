@@ -29,6 +29,8 @@
     "lodash-es": "^4.17.21",
     "minio": "^8.0.5",
     "pinia": "^3.0.4",
+    "simple-mind-map": "^0.14.0-fix.2",
+    "simple-mind-map-plugin-themes": "^1.0.1",
     "three": "^0.183.2",
     "vue": "^3.5.30",
     "vue-echarts": "^8.0.1",
