@@ -109,9 +109,7 @@ onMounted(() => {
     <div class="space-y-6">
       <el-row :gutter="24">
         <el-col :span="12">
-          <div
-            class="p-4 bg-linear-to-br from-blue-900/20 to-cyan-900/20 rounded-xl border border-blue-800"
-          >
+          <div class="p-4 bg-linear-to-br from-blue-900/20 to-cyan-900/20 rounded-xl border border-blue-800">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-2">
                 <el-icon class="text-blue-500 text-xl">
@@ -127,22 +125,15 @@ onMounted(() => {
               </div>
               <div class="text-sm text-blue-500 mb-1">/ {{ stats.suit.total }} 总数</div>
             </div>
-            <el-progress
-              :percentage="suitProgress"
-              :stroke-width="8"
-              color="#3b82f6"
-              class="mt-3"
-            />
+            <el-progress :percentage="suitProgress" :stroke-width="8" color="#3b82f6" class="mt-3" />
             <div class="flex justify-between text-xs text-blue-500 mt-1">
-              <span>执行 {{ stats.suit.executed }}</span>
-              <span>待处理 {{ stats.suit.pending }}</span>
+              <span>已处理数 {{ stats.suit.executed }}</span>
+              <span>等待处理 {{ stats.suit.pending }}</span>
             </div>
           </div>
         </el-col>
         <el-col :span="12">
-          <div
-            class="p-4 bg-linear-to-br from-emerald-900/20 to-green-900/20 rounded-xl border border-emerald-800"
-          >
+          <div class="p-4 bg-linear-to-br from-emerald-900/20 to-green-900/20 rounded-xl border border-emerald-800">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-2">
                 <el-icon class="text-emerald-500 text-xl">
@@ -158,15 +149,10 @@ onMounted(() => {
               </div>
               <div class="text-sm text-emerald-500 mb-1">/ {{ stats.order.total }} 总数</div>
             </div>
-            <el-progress
-              :percentage="orderProgress"
-              :stroke-width="8"
-              color="#10b981"
-              class="mt-3"
-            />
+            <el-progress :percentage="orderProgress" :stroke-width="8" color="#10b981" class="mt-3" />
             <div class="flex justify-between text-xs text-emerald-500 mt-1">
-              <span>执行 {{ stats.order.executed }}</span>
-              <span>待处理 {{ stats.order.pending }}</span>
+              <span>已处理数 {{ stats.order.executed }}</span>
+              <span>等待处理 {{ stats.order.pending }}</span>
             </div>
           </div>
         </el-col>
@@ -178,8 +164,8 @@ onMounted(() => {
         <el-col :span="8">
           <div class="p-3 bg-[#1d1d1d] rounded-lg border border-gray-700">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-gray-700 dark:text-gray-300 font-medium">Process</span>
-              <span class="text-xs text-gray-400">任务处理</span>
+              <span class="text-gray-300 font-medium">Process</span>
+              <span class="text-xs text-gray-400">数据处理</span>
             </div>
             <div class="grid grid-cols-3 gap-2 text-center">
               <div class="p-2 bg-blue-900/30 rounded-lg">
@@ -195,12 +181,7 @@ onMounted(() => {
                 <div class="text-xs text-red-400">错误</div>
               </div>
             </div>
-            <el-progress
-              :percentage="processProgress"
-              :stroke-width="4"
-              color="#3b82f6"
-              class="mt-3"
-            />
+            <el-progress :percentage="processProgress" :stroke-width="4" color="#3b82f6" class="mt-3" />
           </div>
         </el-col>
         <el-col :span="8">
@@ -223,12 +204,7 @@ onMounted(() => {
                 <div class="text-xs text-red-400">错误</div>
               </div>
             </div>
-            <el-progress
-              :percentage="fractureProgress"
-              :stroke-width="4"
-              color="#3b82f6"
-              class="mt-3"
-            />
+            <el-progress :percentage="fractureProgress" :stroke-width="4" color="#3b82f6" class="mt-3" />
           </div>
         </el-col>
         <el-col :span="8">
@@ -251,12 +227,7 @@ onMounted(() => {
                 <div class="text-xs text-red-400">错误</div>
               </div>
             </div>
-            <el-progress
-              :percentage="densityProgress"
-              :stroke-width="4"
-              color="#3b82f6"
-              class="mt-3"
-            />
+            <el-progress :percentage="densityProgress" :stroke-width="4" color="#3b82f6" class="mt-3" />
           </div>
         </el-col>
       </el-row>
