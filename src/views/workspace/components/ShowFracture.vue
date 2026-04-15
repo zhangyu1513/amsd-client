@@ -32,17 +32,21 @@ const fracture = reactive<Fracture>({
   Type: 'total',
 })
 
-const searchForm = reactive<FractureSearchParams & PaginationParams>({
+const paginationForm = ref<PaginationParams>({
   Page: 1,
   PageSize: 10,
-  ProcessID: props.process.ID,
 })
+
+const searchParams = computed<FractureSearchParams>(() => ({
+  ...paginationForm.value,
+  ProcessID: props.process.ID,
+}))
 
 const listFractures = async () => {
   if (!props.process.ID) return
   tableLoading.value = true
   try {
-    const response = await api.fracture.getFractures(searchForm)
+    const response = await api.fracture.getFractures(searchParams.value)
     tableData.value = []
     await nextTick()
     tableData.value = response.list
@@ -105,7 +109,9 @@ watch(
 
 watch(autoRefresh, toggleAutoRefresh)
 
-onMounted(() => { })
+onMounted(() => {
+  console.log(props)
+})
 
 onUnmounted(() => {
   stopAutoRefresh()
