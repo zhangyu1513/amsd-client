@@ -37,7 +37,7 @@ const getUsagePercent = (loaded: number, threads: number) => {
 }
 
 const getUsageStatus = (percent: number) => {
-  if (percent >= 90) return 'danger'
+  if (percent >= 90) return 'exception'
   if (percent >= 70) return 'warning'
   return 'success'
 }
@@ -58,16 +58,16 @@ const getUsageStatus = (percent: number) => {
         <div class="flex items-center gap-2">
           <!-- 左侧：图标+名称+主机 -->
           <div class="flex items-center gap-2 w-40 shrink-0">
-            <div
-              class="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-blue-900 text-blue-300"
-            >
+            <div class="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-blue-900 text-blue-300">
               <el-icon size="16">
                 <Monitor />
               </el-icon>
             </div>
             <div class="min-w-0">
               <div class="font-medium text-sm truncate">{{ node.Name }}</div>
-              <div class="text-xs text-gray-400 truncate">{{ node.Host }}:{{ node.Port }}</div>
+              <div class="text-xs text-gray-400 truncate">
+                <el-tag>{{ node.Host }}:{{ node.Port }}</el-tag>
+              </div>
             </div>
           </div>
           <!-- 中间：路径信息 -->
@@ -90,13 +90,8 @@ const getUsageStatus = (percent: number) => {
               <div class="text-sm font-medium">{{ node.Loaded }}/{{ node.Threads }}</div>
             </div>
             <div class="w-10 text-center">
-              <el-progress
-                type="dashboard"
-                :percentage="getUsagePercent(node.Loaded, node.Threads)"
-                :status="getUsageStatus(getUsagePercent(node.Loaded, node.Threads))"
-                :width="48"
-                :stroke-width="8"
-              />
+              <el-progress type="dashboard" :percentage="getUsagePercent(node.Loaded, node.Threads)"
+                :status="getUsageStatus(getUsagePercent(node.Loaded, node.Threads))" :width="48" :stroke-width="8" />
             </div>
           </div>
         </div>
