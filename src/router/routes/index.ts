@@ -5,6 +5,8 @@ import workspaceRoutes from './workspace'
 import commonRoutes from './common'
 import loginRoutes from './login'
 
+import toolingRoutes from './tooling'
+
 export const constantRoutes: RouteRecordRaw[] = [
   loginRoutes,
   {
@@ -16,6 +18,6 @@ export const constantRoutes: RouteRecordRaw[] = [
       showInMenu: false,
       requiresAuth: true,
     },
-    children: [dashboardRoutes, workspaceRoutes, commonRoutes],
+    children: [dashboardRoutes, workspaceRoutes, toolingRoutes, commonRoutes],
   },
 ]
