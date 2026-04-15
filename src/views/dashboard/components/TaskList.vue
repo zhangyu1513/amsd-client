@@ -97,7 +97,7 @@ onUnmounted(() => {
       </div>
     </template>
 
-    <div v-if="loading || tasks.length === 0" class="flex items-center justify-center h-48">
+    <div v-if="loading || tasks.length === 0" class="flex items-center justify-center h-full w-full">
       <el-icon class="is-loading text-2xl text-gray-400">
         <RefreshRight />
       </el-icon>
