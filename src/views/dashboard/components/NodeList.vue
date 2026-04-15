@@ -66,17 +66,17 @@ const getUsageStatus = (percent: number) => {
             <div class="min-w-0">
               <div class="font-medium text-sm truncate">{{ node.Name }}</div>
               <div class="text-xs text-gray-400 truncate">
-                <el-tag>{{ node.Host }}:{{ node.Port }}</el-tag>
+                <el-tag>IP - {{ node.Host }}:{{ node.Port }}</el-tag>
               </div>
             </div>
           </div>
           <!-- 中间：路径信息 -->
           <div class="flex-1 min-w-0 px-2">
             <div class="text-xs text-gray-500 truncate" :title="node.Workspace">
-              {{ node.Workspace }}
+              工作空间: {{ node.Workspace }}
             </div>
             <div class="text-xs text-gray-500 truncate" :title="node.ExePath">
-              {{ node.ExePath }}
+              执行文件: {{ node.ExePath }}
             </div>
           </div>
           <!-- 右侧：状态信息 -->
