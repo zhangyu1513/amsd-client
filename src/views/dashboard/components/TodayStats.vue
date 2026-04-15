@@ -64,7 +64,7 @@ onMounted(() => {
                 <el-icon class="text-xs">
                   <CircleCheckFilled />
                 </el-icon>
-                <span>被处理数</span>
+                <span>已处理数</span>
               </div>
               <div class="text-xl font-bold mt-1">{{ suitStats.executed }}</div>
             </div>
@@ -113,7 +113,7 @@ onMounted(() => {
                 <el-icon class="text-xs">
                   <CircleCheckFilled />
                 </el-icon>
-                <span>被处理数</span>
+                <span>已处理数</span>
               </div>
               <div class="text-xl font-bold mt-1">{{ orderStats.executed }}</div>
             </div>
