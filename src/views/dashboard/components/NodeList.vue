@@ -64,9 +64,9 @@ const getUsageStatus = (percent: number) => {
               </el-icon>
             </div>
             <div class="min-w-0">
-              <div class="font-medium text-sm truncate">{{ node.Name }}</div>
-              <div class="text-xs text-gray-400 truncate">
-                <el-tag>IP - {{ node.Host }}:{{ node.Port }}</el-tag>
+              <div class="font-medium text-sm">{{ node.Name }}</div>
+              <div class="text-xs text-gray-400">
+                IP - {{ node.Host }}:{{ node.Port }}
               </div>
             </div>
           </div>
