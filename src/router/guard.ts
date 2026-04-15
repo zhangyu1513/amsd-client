@@ -1,4 +1,4 @@
-import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import type { RouteLocationNormalized } from 'vue-router'
 
 export interface RouteMeta {
   title: string
@@ -9,11 +9,7 @@ export interface RouteMeta {
   requiresAuth?: boolean
 }
 
-export const createRouteGuard = (
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext,
-) => {
+export const createRouteGuard = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
   const token = localStorage.getItem('token')
   const userInfo = localStorage.getItem('userInfo')
   const isLoggedIn = !!(token && userInfo)
@@ -21,15 +17,11 @@ export const createRouteGuard = (
   const requiresAuth = (to.meta.requiresAuth as boolean) ?? false
 
   if (requiresAuth) {
-    if (isLoggedIn) {
-      next()
-    } else {
-      next('/login')
+    if (!isLoggedIn) {
+      return '/login'
     }
   } else if (to.path === '/login' && isLoggedIn) {
-    next('/')
-  } else {
-    next()
+    return '/'
   }
 }
 
