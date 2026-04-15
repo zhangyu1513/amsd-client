@@ -53,16 +53,13 @@ const formatDuration = (nanoseconds?: number) => {
 const fetchTasks = async () => {
   try {
     const res = await api.dashboard.getRunningTasks()
-    tasks.value = res || []
+    tasks.value = Array.isArray(res)
+      ? res.filter((task) => task !== null && task !== undefined)
+      : []
   } catch (error) {
     console.error('获取运行任务失败:', error)
   } finally {
-    if (tasks.value.length > 0) {
-      loading.value = false
-    } else {
-      loading.value = true
-    }
-
+    loading.value = false
   }
 }
 
@@ -163,16 +160,16 @@ onUnmounted(() => {
   border-top: 1px solid var(--el-border-color-lighter);
 }
 
-.max-h-\[400px\]::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 4px;
 }
 
-.max-h-\[400px\]::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.1);
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 
-.max-h-\[400px\]::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background-color: transparent;
 }
 </style>
