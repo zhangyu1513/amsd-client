@@ -85,6 +85,8 @@ export interface Process {
   Error?: string // 对应 text 类型
   Log?: string // 对应 text 类型
 
+  UserID?: number
+  Creator?: string
   SuitID?: number // 外键，not null
 
   // 关联数据，通常在后端返回 JSON 时包含
@@ -122,6 +124,9 @@ export interface Fracture {
   Log?: string // text 类型
 
   ProcessID?: number // 外键，not null
+
+  UserID?: number
+  Creator?: string
 }
 
 export interface FractureSearchParams extends PaginationParams, Fracture {}
@@ -151,6 +156,9 @@ export interface Density {
   Log?: string // text 类型
 
   ProcessID?: number // 外键，not null
+
+  UserID?: number
+  Creator?: string
 }
 
 export interface DensitySearchParams extends PaginationParams, Density {}
