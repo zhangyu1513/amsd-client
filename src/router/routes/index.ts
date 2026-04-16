@@ -1,14 +1,17 @@
-import type { RouteRecordRaw } from 'vue-router'
-
 import dashboardRoutes from './dashboard'
 import workspaceRoutes from './workspace'
 import commonRoutes from './common'
 import loginRoutes from './login'
+import adminRoutes from './admin'
 
 import toolingRoutes from './tooling'
 
-export const constantRoutes: RouteRecordRaw[] = [
+import status401 from '@/views/status/401'
+import status404 from '@/views/status/404'
+
+export const constantRoutes = [
   loginRoutes,
+  status401,
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
@@ -18,6 +21,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       showInMenu: false,
       requiresAuth: true,
     },
-    children: [dashboardRoutes, workspaceRoutes, toolingRoutes, commonRoutes],
+    children: [dashboardRoutes, workspaceRoutes, toolingRoutes, commonRoutes, adminRoutes],
   },
+  status404,
 ]

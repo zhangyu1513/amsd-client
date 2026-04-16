@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import router from '@/router'
+import { useUserStore } from '@/stores/user'
 
-// 菜单项接口
 export interface MenuItem {
   path: string
   title: string
@@ -10,21 +10,22 @@ export interface MenuItem {
   children?: MenuItem[]
 }
 
-// 从路由配置中提取菜单项
 export function getMenuItems(): MenuItem[] {
   const routes = router.getRoutes()
   const menuItems: MenuItem[] = []
+  const userStore = useUserStore()
 
-  // 找到根路由（path为'/'的路由）
   const rootRoute = routes.find((route) => route.path === '/')
   if (!rootRoute || !rootRoute.children) {
     return menuItems
   }
 
-  // 处理子路由
   rootRoute.children.forEach((route) => {
-    // 检查是否应该显示在菜单中
     if (route.meta?.showInMenu !== false && route.meta?.title) {
+      if (route.meta?.requiresAdmin && !userStore.isAdmin()) {
+        return
+      }
+
       const menuItem: MenuItem = {
         path: route.path,
         title: route.meta.title as string,
@@ -32,12 +33,10 @@ export function getMenuItems(): MenuItem[] {
         order: (route.meta.order as number) || 999,
       }
 
-      // 如果有子路由，递归处理
       if (route.children && route.children.length > 0) {
         const childMenuItems: MenuItem[] = []
         route.children.forEach((childRoute) => {
           if (childRoute.meta?.showInMenu !== false && childRoute.meta?.title) {
-            // 构建完整的子路由路径
             const fullPath =
               route.path === '/' ? `/${childRoute.path}` : `${route.path}/${childRoute.path}`
             childMenuItems.push({
@@ -49,7 +48,6 @@ export function getMenuItems(): MenuItem[] {
           }
         })
 
-        // 按order排序子菜单项
         if (childMenuItems.length > 0) {
           menuItem.children = childMenuItems.sort((a, b) => (a.order || 999) - (b.order || 999))
         }
@@ -59,7 +57,6 @@ export function getMenuItems(): MenuItem[] {
     }
   })
 
-  // 按order排序菜单项
   return menuItems.sort((a, b) => (a.order || 999) - (b.order || 999))
 }
 
