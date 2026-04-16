@@ -4,7 +4,10 @@ import { ElMessage, ElLoading } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { Suit, Process, Order } from '@/api/types'
 import { api } from '@/api'
+import { useUserStore } from '@/stores/user'
 import { Loading, Document } from '@element-plus/icons-vue'
+
+const userStore = useUserStore()
 
 // 定义组件Props
 interface Props {
@@ -72,7 +75,8 @@ const handleSubmit = async () => {
     const submitData: Process = {
       ...process,
       SuitID: props.suit.ID,
-      Orders: checkedOrders.value.join(';'), // 将选中的订单编号用逗号分隔
+      UserID: userStore.userInfo?.ID,
+      Orders: checkedOrders.value.join(';'),
     }
 
     // 调用API创建处理任务

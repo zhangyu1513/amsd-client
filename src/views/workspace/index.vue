@@ -254,6 +254,7 @@ const loadProcessData = (suitId: number) => {
                               {{ formatDate(scope.row.UpdatedAt) }}
                             </template>
                           </el-table-column>
+                          <el-table-column label="创建者" prop="Creator" align="center" header-align="center" width="80" />
                           <el-table-column label="状态" prop="Status" align="center" header-align="center" width="100">
                             <template #default="scope">
                               <el-tag v-if="scope.row.Status === 'open'" type="success" size="small">进行中</el-tag>
