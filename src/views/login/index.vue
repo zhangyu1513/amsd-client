@@ -12,8 +12,8 @@ interface LoginForm {
 }
 
 const form = reactive<LoginForm>({
-  username: 'auto',
-  password: '123456',
+  username: '',
+  password: '',
 })
 
 const loading = ref(false)
@@ -240,7 +240,7 @@ const handleLogin = async () => {
       // 跳转到首页
       router.push('/')
     } else {
-      ElMessage.error('登录失败，请检查用户名和密码')
+      // ElMessage.error('登录失败，请检查用户名和密码')
     }
   } catch (error) {
     console.error('登录失败:', error)
@@ -302,36 +302,18 @@ onUnmounted(() => {
         <!-- 登录表单 -->
         <el-form :model="form" class="login-form" @submit.prevent="handleLogin">
           <el-form-item>
-            <el-input
-              v-model="form.username"
-              placeholder="USERNAME"
-              size="large"
-              :prefix-icon="User"
-              class="login-input tech-input"
-            />
+            <el-input v-model="form.username" placeholder="USERNAME" size="large" :prefix-icon="User"
+              class="login-input tech-input" />
           </el-form-item>
 
           <el-form-item>
-            <el-input
-              v-model="form.password"
-              type="password"
-              placeholder="PASSWORD"
-              size="large"
-              :prefix-icon="Lock"
-              show-password
-              class="login-input tech-input"
-              @keyup.enter="handleLogin"
-            />
+            <el-input v-model="form.password" type="password" placeholder="PASSWORD" size="large" :prefix-icon="Lock"
+              show-password class="login-input tech-input" @keyup.enter="handleLogin" />
           </el-form-item>
 
           <el-form-item>
-            <el-button
-              type="primary"
-              size="large"
-              :loading="loading"
-              @click="handleLogin"
-              class="login-button tech-button"
-            >
+            <el-button type="primary" size="large" :loading="loading" @click="handleLogin"
+              class="login-button tech-button">
               <span class="button-text">{{ loading ? '验证中...' : '系统接入' }}</span>
               <span class="button-glow"></span>
             </el-button>
@@ -447,6 +429,7 @@ onUnmounted(() => {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 0.3;
@@ -494,12 +477,10 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   border-radius: 16px;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 168, 255, 0.3) 0%,
-    rgba(138, 43, 226, 0.3) 50%,
-    rgba(0, 255, 255, 0.3) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(0, 168, 255, 0.3) 0%,
+      rgba(138, 43, 226, 0.3) 50%,
+      rgba(0, 255, 255, 0.3) 100%);
   mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -672,12 +653,10 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 168, 255, 0.8) 0%,
-    rgba(138, 43, 226, 0.8) 50%,
-    rgba(0, 255, 255, 0.8) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(0, 168, 255, 0.8) 0%,
+      rgba(138, 43, 226, 0.8) 50%,
+      rgba(0, 255, 255, 0.8) 100%);
   filter: blur(10px);
   opacity: 0;
   transition: opacity 0.3s ease;

@@ -77,21 +77,15 @@ const getIconComponent = (iconName?: string) => {
 
 <template>
   <div :class="['h-full shrink-0', props.class]">
-    <el-aside
-      :width="props.isCollapse ? '64px' : '200px'"
-      class="sidebar-container transition-all duration-500 ease-tech h-full"
-    >
+    <el-aside :width="props.isCollapse ? '64px' : '200px'"
+      class="sidebar-container transition-all duration-500 ease-tech h-full">
       <!-- 科技感背景光效 -->
       <div class="sidebar-glow" :class="{ collapsed: props.isCollapse }"></div>
 
       <!-- 导航菜单 -->
-      <el-menu
-        :default-active="route.path"
-        :collapse="props.isCollapse"
-        router
+      <el-menu :default-active="route.path" :collapse="props.isCollapse" router
         class="border-r border-gray-800 h-full bg-gray-900/50 backdrop-blur-sm"
-        :class="{ 'menu-collapsed': props.isCollapse }"
-      >
+        :class="{ 'menu-collapsed': props.isCollapse }">
         <!-- 递归渲染菜单项 -->
         <template v-for="item in menuItems" :key="item.path">
           <template v-if="item.children && item.children.length > 0">
@@ -104,12 +98,8 @@ const getIconComponent = (iconName?: string) => {
                 </div>
                 <span class="menu-title">{{ item.title }}</span>
               </template>
-              <el-menu-item
-                v-for="child in item.children"
-                :key="child.path"
-                :index="child.path"
-                class="submenu-item-tech"
-              >
+              <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path"
+                class="submenu-item-tech">
                 <div class="submenu-icon-wrapper">
                   <el-icon v-if="child.icon" class="submenu-icon">
                     <component :is="getIconComponent(child.icon)" />
@@ -138,13 +128,8 @@ const getIconComponent = (iconName?: string) => {
 
       <!-- 折叠按钮 -->
       <div class="absolute bottom-4 left-0 right-0 flex justify-center">
-        <el-button
-          :icon="props.isCollapse ? 'Expand' : 'Fold'"
-          circle
-          size="small"
-          @click="handleToggleCollapse"
-          class="collapse-btn-tech"
-        />
+        <el-button :icon="props.isCollapse ? 'Expand' : 'Fold'" circle size="small" @click="handleToggleCollapse"
+          class="collapse-btn-tech" disabled />
       </div>
     </el-aside>
   </div>
@@ -171,12 +156,10 @@ const getIconComponent = (iconName?: string) => {
   left: 0;
   right: 0;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(59, 130, 246, 0.1) 0%,
-    rgba(139, 92, 246, 0.05) 50%,
-    rgba(59, 130, 246, 0.1) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(59, 130, 246, 0.1) 0%,
+      rgba(139, 92, 246, 0.05) 50%,
+      rgba(59, 130, 246, 0.1) 100%);
   opacity: 0.5;
   transition: opacity 0.5s ease;
   pointer-events: none;
@@ -337,6 +320,7 @@ const getIconComponent = (iconName?: string) => {
 
 /* 科技感脉冲效果 */
 @keyframes pulse-glow {
+
   0%,
   100% {
     box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
@@ -365,7 +349,7 @@ const getIconComponent = (iconName?: string) => {
   display: none;
 }
 
-:deep(.el-menu--collapse) .el-sub-menu__title > .menu-icon-wrapper {
+:deep(.el-menu--collapse) .el-sub-menu__title>.menu-icon-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;

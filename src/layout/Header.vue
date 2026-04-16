@@ -37,8 +37,8 @@ const handleCreate = () => {
 }
 
 // 处理退出登录
-const handleLogout = () => {
-  userStore.logout()
+const handleLogout = async () => {
+  await userStore.logout()
   router.push('/login')
 }
 
@@ -85,9 +85,9 @@ const handleSettings = () => {
             <UserInfo
               v-if="userInfo"
               :user="{
-                name: userInfo.username,
-                avatar: userInfo.avatar,
-                role: userInfo.roles?.[0] || '用户',
+                name: userInfo.Name || userInfo.Username,
+                avatar: '',
+                role: '用户',
               }"
               @logout="handleLogout"
               @profile="handleProfile"
