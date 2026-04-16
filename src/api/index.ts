@@ -1,136 +1,50 @@
 // API 统一入口
-import axios from 'axios'
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { getApiConfig } from '@/utils/env'
-import { ElMessage } from 'element-plus'
+import { http } from './http'
+export { http }
+export default http
+
+// 导出所有API模块
+export * from './types'
+export * from './user'
+
+import { userApi, roleApi, permissionApi, authLogApi, adminApi } from './user'
+import type {
+  User,
+  UserFormData,
+  Role,
+  RoleFormData,
+  Permission,
+  PermissionFormData,
+  LoginLog,
+  UserSearchParams,
+  RoleSearchParams,
+  PermissionSearchParams,
+  LoginLogSearchParams,
+  PaginationResponse,
+} from './user'
 import type {
   Suit,
   SuitSearchParams,
   Order,
+  OrderSearchParams,
   Process,
   ProcessSearchParams,
-  OrderSearchParams,
   Fracture,
   FractureSearchParams,
-  DensitySearchParams,
   Density,
+  DensitySearchParams,
 } from './types'
-import type { getRunningTasks } from './dashboard'
-
-// 使用 env.ts 获取 API 配置
-const apiConfig = getApiConfig()
-
-// API配置 - 使用 env.ts 中的配置
-const API_CONFIG = {
-  // 使用 env.ts 中的 baseURL 配置
-  baseURL: apiConfig.baseUrl,
-  timeout: apiConfig.timeout,
-}
-
-// 创建 axios 实例
-const service: AxiosInstance = axios.create({
-  baseURL: API_CONFIG.baseURL,
-  timeout: API_CONFIG.timeout,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-
-// 请求拦截器
-service.interceptors.request.use(
-  (config) => {
-    // 在这里可以添加 token 等
-    const token = localStorage.getItem('token')
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error: any) => {
-    console.error('请求错误:', error)
-    return Promise.reject(error)
-  },
-)
-
-// 响应拦截器
-service.interceptors.response.use(
-  (response: AxiosResponse) => {
-    const { data } = response
-
-    // 根据后端返回的数据结构进行调整
-    if (data.code === 200 || data.success) {
-      return data.data || data
-    } else {
-      console.error(data.message || '请求失败')
-      return Promise.reject(new Error(data.message || '请求失败'))
-    }
-  },
-  (error: any) => {
-    console.error('响应错误:', error)
-
-    var err_info = ''
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          err_info = '未授权，请重新登录'
-          // 跳转到登录页
-          break
-        case 403:
-          err_info = '拒绝访问'
-          break
-        case 404:
-          err_info = '请求的资源不存在'
-          break
-        case 500:
-          err_info = '服务器内部错误'
-          break
-        default:
-          err_info = error.response.data?.message || '请求失败'
-      }
-    } else if (error.request) {
-      err_info = '网络错误，请检查网络连接'
-    } else {
-      err_info = '请求配置错误'
-    }
-    ElMessage({
-      showClose: true,
-      message: err_info,
-      duration: 0,
-      type: 'error',
-    })
-
-    return Promise.reject(error)
-  },
-)
-
-// 导出常用的请求方法
-export const http = {
-  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return service.get(url, config)
-  },
-
-  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return service.post(url, data, config)
-  },
-
-  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return service.put(url, data, config)
-  },
-
-  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return service.delete(url, config)
-  },
-
-  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return service.patch(url, data, config)
-  },
-}
-
-// 导出原始的 axios 实例
-export default service
-
-// 导出所有API模块
-export * from './types'
+import {
+  login as authLogin,
+  logout as authLogout,
+  getUserInfo as authGetUserInfo,
+  updateUserInfo as authUpdateUserInfo,
+  changePassword as authChangePassword,
+  type LoginParams,
+  type LoginResponse,
+  type UpdateUserInfoParams,
+  type ChangePasswordParams,
+} from './auth'
 // export * from './auth'
 // export * from './suit'
 // export * from './order'
@@ -143,21 +57,20 @@ export * from './types'
 // 统一API对象 - 从各个模块导入具体实现
 export const api = {
   auth: {
-    login: async (params: any) => {
-      const authModule = await import('./auth')
-      return authModule.default.login(params)
+    login(params: LoginParams): Promise<LoginResponse> {
+      return authLogin(params)
     },
-    logout: async () => {
-      const authModule = await import('./auth')
-      return authModule.default.logout()
+    logout(): Promise<void> {
+      return authLogout()
     },
-    getUserInfo: async () => {
-      const authModule = await import('./auth')
-      return authModule.default.getUserInfo()
+    getUserInfo(): Promise<User> {
+      return authGetUserInfo()
     },
-    updateUserInfo: async (params: any) => {
-      const authModule = await import('./auth')
-      return authModule.default.updateUserInfo(params)
+    updateUserInfo(params: UpdateUserInfoParams): Promise<User> {
+      return authUpdateUserInfo(params)
+    },
+    changePassword(params: ChangePasswordParams): Promise<void> {
+      return authChangePassword(params)
     },
   },
   suit: {
@@ -227,6 +140,27 @@ export const api = {
     //   const logModule = await import('./log')
     //   return logModule.default.getDensityLogs(densityId, params)
     // },
+  },
+  admin: {
+    getUsers: userApi.getUsers,
+    createUser: adminApi.createUser,
+    updateUser: adminApi.updateUser,
+    deleteUser: adminApi.deleteUser,
+    getRoles: roleApi.getRoles,
+    createRole: adminApi.createRole,
+    updateRole: adminApi.updateRole,
+    deleteRole: adminApi.deleteRole,
+    getPermissions: permissionApi.getPermissions,
+    createPermission: adminApi.createPermission,
+    updatePermission: adminApi.updatePermission,
+    deletePermission: adminApi.deletePermission,
+    assignUserRole: adminApi.assignUserRole,
+    removeUserRole: adminApi.removeUserRole,
+    getUserRoles: userApi.getUserRoles,
+    assignRolePermission: adminApi.assignRolePermission,
+    removeRolePermission: adminApi.removeRolePermission,
+    getRolePermissions: roleApi.getRolePermissions,
+    getLoginLogs: authLogApi.getLoginLogs,
   },
   dashboard: {
     getDashboardStats: async () => {

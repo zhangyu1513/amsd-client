@@ -1,5 +1,5 @@
 // 套单管理API
-import { http } from './index'
+import { http } from './http'
 import type { Suit, SuitSearchParams, PaginatedResponse } from './types'
 
 /**

@@ -1,5 +1,5 @@
 // 日志管理API
-import { http } from './index'
+import { http } from './http'
 import type { PaginationParams, PaginatedResponse, Process, Fracture } from './types'
 
 /**

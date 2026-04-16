@@ -1,5 +1,5 @@
 // 仪表盘API
-import { http } from './index'
+import { http } from './http'
 import type {
   SuitSearchParams,
   ProcessSearchParams,

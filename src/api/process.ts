@@ -1,5 +1,5 @@
 // 处理任务API
-import { http } from './index'
+import { http } from './http'
 import type { Process, ProcessSearchParams, PaginatedResponse } from './types'
 
 /**

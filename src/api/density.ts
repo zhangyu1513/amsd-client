@@ -1,5 +1,5 @@
 // 密度分析API
-import { http } from './index'
+import { http } from './http'
 import type { Density, DensitySearchParams, PaginatedResponse } from './types'
 
 /**

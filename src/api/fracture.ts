@@ -1,6 +1,6 @@
 // 断裂分析API
 import { fract } from 'three/src/nodes/math/MathNode.js'
-import { http } from './index'
+import { http } from './http'
 import type { Fracture, FractureSearchParams, PaginatedResponse } from './types'
 
 /**
