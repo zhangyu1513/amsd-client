@@ -1,0 +1,6 @@
+export { default as FileStats } from './FileStats.vue'
+export { default as FileToolbar } from './FileToolbar.vue'
+export { default as FileTable } from './FileTable.vue'
+export { default as FileVersionDialog } from './FileVersionDialog.vue'
+export { default as FileTagDialog } from './FileTagDialog.vue'
+export { default as FileCopyMoveDialog } from './FileCopyMoveDialog.vue'
