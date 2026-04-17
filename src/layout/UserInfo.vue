@@ -66,9 +66,8 @@ const handleSettings = () => {
     </span>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item @click="handleProfile" disabled>个人中心</el-dropdown-item>
-        <el-dropdown-item @click="handleSettings" disabled>设置</el-dropdown-item>
-        <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
+
+        <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
