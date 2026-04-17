@@ -285,3 +285,113 @@ export interface Node {
   Ipc: number // IPC性能指数
   Loaded: number // 已占用线程数
 }
+
+// ==========================================
+// 存储相关类型 (Storage)
+// ==========================================
+
+export type StorageStatus = 'active' | 'inactive'
+
+export interface StorageVolume {
+  ID: number
+  CreatedAt?: Date
+  UpdatedAt?: Date
+  DeletedAt?: Date
+  Name: string
+  BasePath: string
+  TotalSize: number
+  UsedSize?: number
+  Status: StorageStatus
+}
+
+export interface StorageFolder {
+  ID: number
+  CreatedAt?: Date
+  UpdatedAt?: Date
+  DeletedAt?: Date
+  Name: string
+  Path: string
+  ParentID?: number
+  VolumeID: number
+  OwnerID?: number
+  Status: StorageStatus
+}
+
+export interface StorageFile {
+  ID: number
+  CreatedAt?: Date
+  UpdatedAt?: Date
+  DeletedAt?: Date
+  UID: string
+  Name: string
+  Path: string
+  Size: number
+  MD5?: string
+  FolderID: number
+  OwnerID?: number
+  Status: StorageStatus
+  Versions?: FileVersion[]
+  Tags?: FileTag[]
+}
+
+export interface FileVersion {
+  ID: number
+  CreatedAt?: Date
+  FileID: number
+  Version: number
+  Size: number
+  MD5?: string
+  Path?: string
+}
+
+export interface FileTag {
+  ID: number
+  Key: string
+  Value: string
+  FileID: number
+  CreatedAt?: Date
+}
+
+export interface StoragePolicy {
+  ID: number
+  CreatedAt?: Date
+  UpdatedAt?: Date
+  Name: string
+  RuleType: string
+  ActionDays: number
+  Status: StorageStatus
+}
+
+export interface StorageQuota {
+  ID: number
+  UserID: number
+  TotalSize: number
+  UsedSize: number
+  CreatedAt?: Date
+  UpdatedAt?: Date
+}
+
+export interface StorageStats {
+  TotalVolumes: number
+  TotalSize: number
+  UsedSize: number
+  FileCount: number
+}
+
+export interface FileAccess {
+  ID: number
+  CreatedAt?: Date
+  FileID: number
+  UserID: number
+  Action: string
+  IP?: string
+}
+
+export interface StorageSearchParams {
+  volumeId?: number
+  folderId?: number
+  ownerId?: number
+  keyword?: string
+  page?: number
+  pageSize?: number
+}

@@ -195,19 +195,4 @@ export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-export default {
-  formatDate,
-  formatFileSize,
-  generateId,
-  deepClone,
-  useDebounce,
-  useThrottle,
-  validateEmail,
-  validatePhone,
-  downloadFile,
-  copyToClipboard,
-  getUrlParam,
-  setUrlParams,
-  stringToColor,
-  sleep,
-}
+export { getFileType, isImageFile } from './file'

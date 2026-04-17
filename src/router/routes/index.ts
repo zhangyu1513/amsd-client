@@ -3,6 +3,7 @@ import workspaceRoutes from './workspace'
 import commonRoutes from './common'
 import loginRoutes from './login'
 import adminRoutes from './admin'
+import storageRoutes from './storage'
 
 import toolingRoutes from './tooling'
 
@@ -21,7 +22,14 @@ export const constantRoutes = [
       showInMenu: false,
       requiresAuth: true,
     },
-    children: [dashboardRoutes, workspaceRoutes, toolingRoutes, commonRoutes, adminRoutes],
+    children: [
+      dashboardRoutes,
+      workspaceRoutes,
+      toolingRoutes,
+      commonRoutes,
+      adminRoutes,
+      storageRoutes,
+    ],
   },
   status404,
 ]
