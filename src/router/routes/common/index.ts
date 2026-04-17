@@ -5,7 +5,7 @@ const drawRoute: RouteRecordRaw = {
   component: () => import('@/views/common/draw/index.vue'),
   meta: {
     title: '流程图工具',
-    icon: 'EditPen',
+    icon: 'Operation',
     showInMenu: true,
     requiresAuth: true,
   },
@@ -17,7 +17,7 @@ const mindmapRoute: RouteRecordRaw = {
   component: () => import('@/views/common/mindmap/index.vue'),
   meta: {
     title: '思维导图',
-    icon: 'Connection',
+    icon: 'List',
     showInMenu: true,
     requiresAuth: true,
   },
@@ -31,7 +31,7 @@ export default {
     title: '通用工具',
     icon: 'Tools',
     showInMenu: true,
-    order: 3,
+    order: 99,
     requiresAuth: true,
   },
   children: [drawRoute, mindmapRoute],

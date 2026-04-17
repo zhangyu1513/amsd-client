@@ -4,7 +4,7 @@ export default {
   path: '/admin',
   meta: {
     title: '系统管理',
-    icon: 'Tools',
+    icon: 'Setting',
     showInMenu: true,
     order: 100,
     requiresAuth: true,

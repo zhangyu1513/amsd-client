@@ -5,7 +5,7 @@ const commonRoute: RouteRecordRaw = {
   component: () => import('@/views/tooling/common.vue'),
   meta: {
     title: '通用解析',
-    icon: 'EditPen',
+    icon: 'Connection',
     showInMenu: true,
     requiresAuth: true,
   },
@@ -16,10 +16,10 @@ export default {
   path: '/tooling',
   redirect: '/tooling/common',
   meta: {
-    title: 'Tooling解析',
+    title: '解析工具',
     icon: 'Tools',
     showInMenu: true,
-    order: 3,
+    order: 10,
     requiresAuth: true,
   },
   children: [commonRoute],
