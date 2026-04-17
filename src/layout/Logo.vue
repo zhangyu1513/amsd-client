@@ -17,12 +17,10 @@ const handleLogoClick = () => {
 </script>
 
 <template>
-  <div class="flex items-center h-full">
+  <div class="flex items-center justify-center">
     <!-- Logo区域 -->
-    <div
-      class="flex items-center justify-center h-16 px-4 cursor-pointer hover:opacity-80 transition-opacity"
-      @click="handleLogoClick"
-    >
+    <div class="flex items-center justify-center h-16 cursor-pointer hover:opacity-80 transition-opacity"
+      @click="handleLogoClick">
       <span class="text-3xl font-bold logo-text">AMSD</span>
     </div>
   </div>
@@ -30,15 +28,13 @@ const handleLogoClick = () => {
 
 <style scoped>
 .logo-text {
-  background: linear-gradient(
-    90deg,
-    #ff6b6b 0%,
-    #ffa726 20%,
-    #66bb6a 40%,
-    #42a5f5 60%,
-    #ab47bc 80%,
-    #ff6b6b 100%
-  );
+  background: linear-gradient(90deg,
+      #ff6b6b 0%,
+      #ffa726 20%,
+      #66bb6a 40%,
+      #42a5f5 60%,
+      #ab47bc 80%,
+      #ff6b6b 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;

@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import { getMenuItems, type MenuItem } from '@/utils/route'
+import Logo from './Logo.vue'
 import {
   Odometer,
   Briefcase,
@@ -21,30 +22,26 @@ import {
   Download,
   Share,
   Link,
+  Folder,
+  User,
+  UserFilled,
+  Key,
+  Clock,
+  Operation,
+  List,
+  Setting,
 } from '@element-plus/icons-vue'
 
 interface Props {
-  isCollapse?: boolean
   class?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  isCollapse: false,
-  class: '',
-})
-
-const emit = defineEmits<{
-  toggleCollapse: []
-}>()
+const props = defineProps<Props>()
 
 const route = useRoute()
 
 // 获取菜单项
 const menuItems = computed(() => getMenuItems())
-
-const handleToggleCollapse = () => {
-  emit('toggleCollapse')
-}
 
 // 图标映射
 const iconMap: Record<string, any> = {
@@ -66,6 +63,14 @@ const iconMap: Record<string, any> = {
   Download,
   Share,
   Link,
+  Folder,
+  User,
+  UserFilled,
+  Key,
+  Clock,
+  Operation,
+  List,
+  Setting,
 }
 
 // 获取图标组件
@@ -77,15 +82,18 @@ const getIconComponent = (iconName?: string) => {
 
 <template>
   <div :class="['h-full shrink-0', props.class]">
-    <el-aside :width="props.isCollapse ? '64px' : '200px'"
-      class="sidebar-container transition-all duration-500 ease-tech h-full">
-      <!-- 科技感背景光效 -->
-      <div class="sidebar-glow" :class="{ collapsed: props.isCollapse }"></div>
-
+    <el-aside
+      width="200px"
+      class="sidebar-container transition-all duration-500 ease-tech h-full flex flex-col items-center justify-center"
+    >
+      <!-- Logo组件 -->
+      <Logo class="w-full" />
       <!-- 导航菜单 -->
-      <el-menu :default-active="route.path" :collapse="props.isCollapse" router
-        class="border-r border-gray-800 h-full bg-gray-900/50 backdrop-blur-sm"
-        :class="{ 'menu-collapsed': props.isCollapse }">
+      <el-menu
+        :default-active="route.path"
+        router
+        class="border-r border-gray-800 bg-gray-900/50 backdrop-blur-sm flex-1 w-full overflow-scroll"
+      >
         <!-- 递归渲染菜单项 -->
         <template v-for="item in menuItems" :key="item.path">
           <template v-if="item.children && item.children.length > 0">
@@ -98,8 +106,12 @@ const getIconComponent = (iconName?: string) => {
                 </div>
                 <span class="menu-title">{{ item.title }}</span>
               </template>
-              <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path"
-                class="submenu-item-tech">
+              <el-menu-item
+                v-for="child in item.children"
+                :key="child.path"
+                :index="child.path"
+                class="submenu-item-tech"
+              >
                 <div class="submenu-icon-wrapper">
                   <el-icon v-if="child.icon" class="submenu-icon">
                     <component :is="getIconComponent(child.icon)" />
@@ -125,12 +137,6 @@ const getIconComponent = (iconName?: string) => {
           </template>
         </template>
       </el-menu>
-
-      <!-- 折叠按钮 -->
-      <div class="absolute bottom-4 left-0 right-0 flex justify-center">
-        <el-button :icon="props.isCollapse ? 'Expand' : 'Fold'" circle size="small" @click="handleToggleCollapse"
-          class="collapse-btn-tech" disabled />
-      </div>
     </el-aside>
   </div>
 </template>
@@ -156,10 +162,12 @@ const getIconComponent = (iconName?: string) => {
   left: 0;
   right: 0;
   height: 100%;
-  background: linear-gradient(90deg,
-      rgba(59, 130, 246, 0.1) 0%,
-      rgba(139, 92, 246, 0.05) 50%,
-      rgba(59, 130, 246, 0.1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(139, 92, 246, 0.05) 50%,
+    rgba(59, 130, 246, 0.1) 100%
+  );
   opacity: 0.5;
   transition: opacity 0.5s ease;
   pointer-events: none;
@@ -175,7 +183,8 @@ const getIconComponent = (iconName?: string) => {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.menu-item-tech::before {
+.menu-item-tech::before,
+.menu-item-tech :deep(.el-sub-menu__title)::before {
   content: '';
   position: absolute;
   left: 0;
@@ -189,7 +198,9 @@ const getIconComponent = (iconName?: string) => {
 }
 
 .menu-item-tech:hover::before,
-.menu-item-tech.is-active::before {
+.menu-item-tech.is-active::before,
+.menu-item-tech:has(:deep(.el-sub-menu__title:hover))::before,
+.menu-item-tech:has(:deep(.el-sub-menu.is-active))::before {
   height: 60%;
 }
 
@@ -206,7 +217,8 @@ const getIconComponent = (iconName?: string) => {
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.menu-item-tech:hover .menu-icon {
+.menu-item-tech:hover .menu-icon,
+.menu-item-tech :deep(.el-sub-menu__title):hover .menu-icon {
   transform: scale(1.2) rotate(5deg);
   color: #3b82f6;
 }
@@ -275,18 +287,6 @@ const getIconComponent = (iconName?: string) => {
   transition: all 0.3s ease;
 }
 
-.collapse-btn-tech {
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-}
-
-.collapse-btn-tech:hover {
-  transform: scale(1.1) rotate(90deg);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
-}
-
 /* 展开动画 - 只应用于非折叠状态 */
 @keyframes slideIn {
   from {
@@ -318,23 +318,6 @@ const getIconComponent = (iconName?: string) => {
   animation: slideIn 0.3s ease forwards;
 }
 
-/* 科技感脉冲效果 */
-@keyframes pulse-glow {
-
-  0%,
-  100% {
-    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
-  }
-
-  50% {
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
-  }
-}
-
-.collapse-btn-tech {
-  animation: pulse-glow 2s infinite;
-}
-
 /* 折叠状态下图标居中显示 */
 :deep(.el-menu--collapse) .el-menu-item,
 :deep(.el-menu--collapse) .el-sub-menu__title {
@@ -349,7 +332,7 @@ const getIconComponent = (iconName?: string) => {
   display: none;
 }
 
-:deep(.el-menu--collapse) .el-sub-menu__title>.menu-icon-wrapper {
+:deep(.el-menu--collapse) .el-sub-menu__title > .menu-icon-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
